@@ -1,0 +1,45 @@
+﻿<Page
+    x:Class="烟尘记.Pause"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:烟尘记"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Pause"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Focusable="True"
+    KeyDown="Page_KeyDown"
+    mc:Ignorable="d">
+
+    <Grid>
+        <Button
+            Name="Save"
+            Width="139"
+            Height="38"
+            Margin="165,0,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Click="Save_Click"
+            Content="保存" />
+        <Button
+            Name="Quit"
+            Width="139"
+            Height="38"
+            Margin="486,154,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Click="Quit_Click"
+            Content="退出" />
+        <Button
+            Name="Quit_to_Start"
+            Width="139"
+            Height="38"
+            Margin="486,270,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Click="Quit_to_Start_Click"
+            Content="退出到开始界面" />
+
+    </Grid>
+</Page>
