@@ -50,7 +50,7 @@
 
                 //music(烟尘记游戏.jump, i);                                              //调用音乐函数，暂时还没写好。
 
-                await Task.Delay(Data.Options.Plot_print_speed);                        //这里是为了实验方便，成品后会去掉注释
+                //await Task.Delay(Data.Options.Plot_print_speed);                        //这里是为了实验方便，成品后会去掉注释
 
                 Plot_scrollviewer.ScrollToBottom();
             }

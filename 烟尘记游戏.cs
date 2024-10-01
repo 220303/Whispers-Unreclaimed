@@ -84,12 +84,12 @@
             Record.Add(Jump + "-" + input);                          //在用户的历史记录中添加这一次的 剧情-选项
 
             //这一步的try其实是一道保险，正常不会用到，因为在前台隐藏代码中做过了过滤
-            try     //无论用户输入一个多大的数字都进行查找，如果找到了就处理，如果没找到就不处理报错，但继续等待有有意义的输入出现
-            {
+            //try     //无论用户输入一个多大的数字都进行查找，如果找到了就处理，如果没找到就不处理报错，但继续等待有有意义的输入出现
+            //{
                 Jump = Convert.ToInt16(File.ReadAllText(Data.Choices_directory_path + Jump + "/" + input + "j.txt"));
-            }
-            catch (System.IO.FileNotFoundException)
-            { }
+            //}
+            //catch (System.IO.FileNotFoundException)
+            //{ }
 
             ChoiceList.Clear();                                               //清空选项List
         }

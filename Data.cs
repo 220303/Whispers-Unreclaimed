@@ -13,9 +13,9 @@ namespace 烟尘记
     {
 
         public static string Saves_directory_path = "saves/";
-        public static string Options_file_path = "Options.txt";
-        public static string Choices_directory_path = "choices/";
         public static string Plot_directory_path = "plots/";
+        public static string Choices_directory_path = "choices/";
+        public static string Options_file_path = "Options.txt";
         public static string Rebillion_qoutes_file_path = "Rebillion Qoutes.txt";
 
 

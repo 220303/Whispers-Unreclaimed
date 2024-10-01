@@ -25,6 +25,7 @@ namespace 烟尘记
 
         private async void start_game()
         {
+            /*
             //更换背景，显示随机李任语录，停留 4 秒钟。
             Random rd = new();
             Rebillion_words_textblock.Text = "       " + Data.Rebillion_qoutes[rd.Next(0, Data.Rebillion_qoutes.Length)];
@@ -35,7 +36,7 @@ namespace 烟尘记
             this.IsEnabled = false;                // 禁用输入
             await Task.Delay(3000);                // 等待4秒
             this.IsEnabled = true;                 // 恢复输入
-
+            */
             NavigationService.GetNavigationService(this).Navigate(new Game());           //跳转到Game界面
         }
 
