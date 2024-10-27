@@ -9,3 +9,4 @@ global using System.Security.Permissions;
 global using System.Windows.Threading;
 global using static System.Convert;
 global using System.ComponentModel;
+global using Microsoft.Win32;

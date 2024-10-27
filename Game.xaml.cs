@@ -1,4 +1,6 @@
-﻿namespace 烟尘记
+﻿using System.Windows.Media.Media3D;
+
+namespace 烟尘记
 {
     /// <summary>
     /// Game.xaml 的交互逻辑
@@ -23,69 +25,87 @@
             InitializeComponent();
             this.Loaded += (s, e) => this.Focus();                                                               //确保焦点汇聚到page上
 
-            game = new(Data.Saves[Data.Options.Save_choose]);                                                   //初始化游戏逻辑对象（利用所选择的存档内容）
-            game.Story_end += finish_view;                                                                          //订阅游戏结尾事件
+            game = new(Data.Saves[Data.Options.Save_choose-1]);                                                   //初始化游戏逻辑对象（利用所选择的存档内容）
 
             now_mode = mode.wait_plot_print;                                                                     //标准初始化前台游戏参数（与存档内容无关）
         }
 
-        private void finish_view(object sender, EventArgs e)                                     //结尾事件被触发时，执行结尾操作
+        private void finish_view()                                                               //结局时执行的结尾操作
         {
             game.Dispose();                                                                      //调用game的Dispose方法，实际上是保存游戏进度
             game = null;                                                                         //将game对象放入垃圾处理器，等待.net平台回收
-            NavigationService.GetNavigationService(this).Navigate(new Trace(false,false));                  //跳转到Trace页面
+            NavigationService.GetNavigationService(this).Navigate(new Trace(false, false));                  //跳转到Trace页面
         }
 
 
-
-
-
-        public async void Plot_print(string plot)
+        public async void Plot_print()
         {
             //逐字输出剧情
 
-            for (int i = 1; i <= plot.Length; i++)                                       //i指要输出的这一段剧情中的第几个字，而 i-1 指这个字对应的plot的序号
+            for (int i = 1; i <= Data.Nodes[game.Jump - 1].Plot.Length; i++)                                       //i指要输出的这一段剧情中的第几个字，而 i-1 指这个字对应的plot的序号
             {
-                PlotText.Text += plot[i - 1];
+                PlotText.Text += Data.Nodes[game.Jump - 1].Plot[i - 1];
 
                 //music(烟尘记游戏.jump, i);                                              //调用音乐函数，暂时还没写好。
 
-                //await Task.Delay(Data.Options.Plot_print_speed);                        //这里是为了实验方便，成品后会去掉注释
+                await Task.Delay(Data.Options.Plot_print_speed);                        //这里是为了实验方便，成品后会去掉注释
 
                 Plot_scrollviewer.ScrollToBottom();
             }
 
             PlotText.Text += "\n";                                                      //输出完后换行，便于下一次输出。
 
-            now_mode = mode.wait_choices_print;                                         //异步执行完后才允许用户与Page交互
+            now_mode = mode.wait_choices_print;
         }
+
+
 
         private void Choice_print()
         {
             if (game != null)                                //检查game是不是null，如果是，说明游戏已经到了结局，甚至都已经不在Game页面了。
             {
-                //输出选项到屏幕
-                ChoicesDock.Visibility = Visibility.Visible;                     //把dockpannal改成可见的（默认是隐藏的）
 
-                foreach (Choice choice_temp in game.ChoiceList)                                                   //按情况循环创建若干个choicebutton
+                
+                if (Data.Nodes[game.Jump - 1].Choices == null)             //如果没有选项，说明是结局，立即触发结局事件
                 {
-
+                    finish_view();
                 }
-                for (int choicelist_counter = 1; choicelist_counter <= game.ChoiceList.Count; choicelist_counter++)   //这里的choivelist_counter从1开始
+                else                                                       //如果有选项，则输出选项
                 {
-                    Button choicebutton = new()
+
+                    //输出选项到屏幕
+                    ChoicesDock.Visibility = Visibility.Visible;                     //把dockpannal改成可见的（默认是隐藏的）
+
+
+                    //统计需要输出几个选项
+                    int choices_count = 0;
+                    foreach (Data.Choice temp_choice in Data.Nodes[game.Jump - 1].Choices)
                     {
-                        Name = "Choice" + choicelist_counter,                    //由于button的name属性必须以字母开头，所以不得不在准备给choose函数传递的值前面加上Choice,后面处理时会去掉
-                        Content = game.ChoiceList[choicelist_counter - 1].content,      //choivelist_counter-1 才是对应的choice元素的序号
-                        Width = ChoicesDock.Width / game.ChoiceList.Count,
-                        Visibility = Visibility.Visible
-                    };
-                    choicebutton.Click += new RoutedEventHandler(choose_click);     //给每一个choicebutton赋予一样的响应点击事件
-                    ChoicesDock.Children.Add(choicebutton);                         //将每一个choicebutton添加到choicesdock中
+                        if (temp_choice.Check(game.Record))
+                            choices_count++;
+                    }
+
+
+                    //创建按钮输出选项
+                    foreach (Data.Choice temp_choice in Data.Nodes[game.Jump - 1].Choices)
+                    {
+                        if (temp_choice.Check(game.Record))
+                        {
+                            Button choicebutton = new()
+                            {
+                                Name = "Choice" + Convert.ToString(Data.Nodes[game.Jump - 1].Choices.IndexOf(temp_choice) + 1),  //由于button的name属性必须以字母开头，所以不得不在前面加上Choice,后面处理时会去掉
+                                Content = temp_choice.Content,
+                                Width = ChoicesDock.Width / choices_count,
+                                Visibility = Visibility.Visible
+                            };
+                            choicebutton.Click += new RoutedEventHandler(choose_click);     //给每一个choicebutton赋予一样的响应点击事件
+                            ChoicesDock.Children.Add(choicebutton);                         //将每一个choicebutton添加到choicesdock中
+                        }
+                    }
+
                 }
             }
         }
-
 
 
         private void music(int plotnumber, int wordnumber)                                             //music函数  主要功能：播放音乐
@@ -107,31 +127,9 @@
 
 
 
-
-
-        private void choose_click(object sender, RoutedEventArgs e)
-        {
-            //若用户点击选项按钮所执行的操作：将按钮的name经处理（去掉之前不得不加的choice）后（剩下的就是数字，可以直接传给input）传给input，执行choose函数
-
-            Button btn = sender as Button;                                                   //获取用户点击的那个按钮
-            int choose_number = Convert.ToInt16((btn.Name).Substring(6));                     //储存用该按钮名称计算出的选项编号
-
-            ChoicesDock.Children.Clear();                                                   //把choicedock中的按钮清空
-            ChoicesDock.Visibility = Visibility.Collapsed;                                  //把choicesdock改成隐藏的（不占用空间）
-
-            game.Choose(choose_number);                                                          //利用先前储存的选项编号执行choose函数
-
-            game.Plot_readin();                                                             //（继续）读入（下一段）剧情，并输出
-            Plot_print(game.Plot);
-
-            now_mode = mode.wait_choices_print;
-
-        }                       //响应用户的鼠标单击输入(mode == 3)
-
-
         private void Page_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Escape)
+            if (e.Key == Key.Escape)
             {
                 NavigationService.GetNavigationService(this).Navigate(new Pause(game));          //跳转到Pause界面
             }
@@ -147,10 +145,7 @@
 
                         now_mode = mode.printing;
 
-                        game.Plot_readin();
-                        Plot_print(game.Plot);
-
-                        //这里何时允许用户与page交互由异步函数决定
+                        Plot_print();
 
                         break;
 
@@ -158,11 +153,10 @@
 
                         now_mode = mode.printing;
 
-                        game.Choices_readin();
                         Choice_print();
 
                         now_mode = mode.wait_choose;
-                        
+
                         break;
 
                     case mode.wait_choose:                                                                                           //确认用户选择
@@ -171,11 +165,10 @@
 
                         if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9))
                         {
-                            int choicenumber = ((int)e.Key + 6) % 10;                                          //把e.Key传递过来的枚举值（实际上是一个数字，代表了键盘上的某一个案件）转换为game.choose方法可以接受的值
+                            int choicenumber = ((int)e.Key + 6) % 10;              //把e.Key传递过来的枚举值（实际上是一个数字，代表了键盘上的某一个按键）转换为game.choose方法可以接受的值
                             game.Choose(choicenumber);
 
-                            game.Plot_readin();                                                    //（继续）读入（下一段）剧情，并输出
-                            Plot_print(game.Plot);
+                            Plot_print();
                         }
 
                         now_mode = mode.wait_choices_print;
@@ -193,10 +186,7 @@
 
                     now_mode = mode.printing;
 
-                    game.Plot_readin();                                                                    //（继续）读入（下一段）剧情，准备输出
-                    Plot_print(game.Plot);
-
-                    //这里何时允许用户与page交互由异步函数决定
+                    Plot_print();
 
                     break;
 
@@ -204,9 +194,7 @@
 
                     now_mode = mode.printing;
 
-                    game.Choices_readin();                                                                  //读入选项，准备输出
                     Choice_print();                                                                         //输出选项
-
 
                     now_mode = mode.wait_choose;
 
@@ -215,7 +203,21 @@
         }                       //响应用户的鼠标单击输入(mode == 1|2)
 
 
+        private void choose_click(object sender, RoutedEventArgs e)
+        {
+            //若用户点击选项按钮所执行的操作：将按钮的name经处理（去掉之前不得不加的choice）后（剩下的就是数字，可以直接传给input）传给input，执行choose函数
 
+            Button btn = sender as Button;                                                  //获取用户点击的那个按钮
+            int choose_number = Convert.ToInt16((btn.Name).Substring(6));                   //储存用该按钮名称计算出的选项编号
+
+
+            ChoicesDock.Children.Clear();                                                   //把choicedock中的按钮清空
+            ChoicesDock.Visibility = Visibility.Collapsed;                                  //把choicesdock改成隐藏的（不占用空间）
+
+            game.Choose(choose_number);
+
+            Plot_print();
+        }                       //响应用户的鼠标单击输入(mode == 3)
 
 
 

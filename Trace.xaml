@@ -15,15 +15,16 @@
     <Grid>
         <ListBox
             x:Name="Saves_ListBox"
-            Margin="0,0,0,142"
+            Margin="0,0,0,55"
             DisplayMemberPath="Name"
             SelectionChanged="Saves_ListBox_SelectionChanged">
         </ListBox>
+
         <Button
             Name="New_save"
             Width="114"
             Height="35"
-            Margin="124,361,0,0"
+            Margin="115,410,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Click="New_save_Click"
@@ -32,21 +33,12 @@
             Name="Delete_save"
             Width="114"
             Height="35"
-            Margin="562,365,0,0"
+            Margin="548,410,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Click="Delete_save_Click"
             Content="删除存档" />
-        <TextBox
-            Name="New_save_name"
-            Width="552"
-            Height="22"
-            Margin="0,324,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            Text=""
-            TextWrapping="Wrap"
-            />
+
 
     </Grid>
 </Page>

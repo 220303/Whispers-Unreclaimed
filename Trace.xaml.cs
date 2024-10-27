@@ -29,7 +29,7 @@ namespace 烟尘记
             this.operation = operation;
             this.back = back;
             Saves_ListBox.ItemsSource = Data.Saves;
-            Saves_ListBox.SelectedItem = Data.Saves[Data.Options.Save_choose];                                   //显示正在哪个存档中
+            Saves_ListBox.SelectedItem = Data.Saves[Data.Options.Save_choose-1];                                   //显示正在哪个存档中
             Saves_ListBox.Background = Brushes.AliceBlue;
             this.Loaded += (s, e) => this.Focus();                                                               //确保焦点汇聚到page上
         }
@@ -51,6 +51,10 @@ namespace 烟尘记
                     NavigationService.GetNavigationService(this).GoBack();
                 }
             }
+            else
+            {
+                NavigationService.GetNavigationService(this).Navigate(new Start());          //跳转到Start界面
+            }
         }
 
 
@@ -63,31 +67,12 @@ namespace 烟尘记
                 if (Saves_ListBox.SelectedItem != null)
                 {
                     Data.Save selected = (Data.Save)Saves_ListBox.SelectedItem;
-                    Data.Options.Save_choose = Data.Saves.IndexOf(selected);
+                    Data.Options.Save_choose = Data.Saves.IndexOf(selected)+1;
                 }
             }
         }
 
 
-
-        private void New_save_Click(object sender, RoutedEventArgs e)
-        {
-            if (operation)
-            {
-                if (!(string.IsNullOrEmpty(New_save_name.Text)) && !(string.IsNullOrWhiteSpace(New_save_name.Text)))
-                {
-                    Data.Saves.Add
-                    (
-                        new Data.Save()
-                        {
-                            Name = New_save_name.Text,
-                            Jump = 1,
-                            Record = new List<string>() { "0-0" }
-                        }
-                    );
-                }
-            }
-        }
 
         private void Delete_save_Click(object sender, RoutedEventArgs e)
         {
@@ -96,7 +81,7 @@ namespace 烟尘记
                 if (Saves_ListBox.SelectedItem != null)
                 {
                     Data.Save selected = (Data.Save)Saves_ListBox.SelectedItem;
-                    if(Data.Options.Save_choose == Data.Saves.IndexOf(selected))
+                    if (Data.Options.Save_choose == Data.Saves.IndexOf(selected))
                     {
                         Data.Options.Save_choose -= 1;
                     }
@@ -104,6 +89,11 @@ namespace 烟尘记
                     File.Delete(Data.Saves_directory_path + selected.Name + ".txt");
                 }
             }
+        }
+
+        private void New_save_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GetNavigationService(this).Navigate(new New_start());           //跳转到New_start界面
         }
     }
 }

@@ -1,0 +1,41 @@
+﻿<Page x:Class="烟尘记.New_start"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:烟尘记"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="New_start">
+
+    <Grid>
+        <TextBox
+            Name="New_save_name"
+            Width="552"
+            Height="22"
+            Margin="0,148,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Text=""
+            TextWrapping="Wrap"
+            />
+        <Button
+            Name="New_save"
+            Width="114"
+            Height="35"
+            Margin="0,252,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Click="New_save_Click"
+            Content="开始游戏" />
+        <Button
+            x:Name="Back"
+            Width="114"
+            Height="35"
+            Margin="0,343,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Click="Back_Click"
+            Content="返回" />
+    </Grid>
+</Page>

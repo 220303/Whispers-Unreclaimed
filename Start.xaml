@@ -15,27 +15,4 @@
     <Page.Background>
         <ImageBrush ImageSource="Resource/image/0000.png" Stretch="Uniform" />
     </Page.Background>
-    <Viewbox Stretch="Uniform">
-        <Grid Width="1920" Height="1080">
-            <TextBlock
-                x:Name="Rebillion_words_textblock"
-                Width="1352"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontSize="54"
-                Foreground="White"
-                TextWrapping="Wrap"
-                Visibility="Collapsed"
-                Text="打败一个人的不是刀剑，而是叹息。 然后李任说:“我没说过这话啊......."/>
-            <Label
-                x:Name="Quotes_lable"
-                Margin="1274,625,160,393"
-                Content=" ——《 Rebillion  Quotes 》"
-                FontSize="35"
-                FontStyle="Oblique"
-                FontWeight="Black"
-                Foreground="White"
-                Visibility="Collapsed" />
-        </Grid>
-    </Viewbox>
 </Page>
