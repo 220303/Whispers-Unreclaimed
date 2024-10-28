@@ -12,11 +12,11 @@ namespace 烟尘记
 {
     public static class Data
     {
-
+        public static string Filesystem_directory_path = "../Filesystem/";
         //存放Plots的位置
-        public static string Plot_directory_path = "plots/";
+        public static string Plot_directory_path = Filesystem_directory_path+"plots/";
         //存放Choices的位置
-        public static string Choices_directory_path = "choices/";
+        public static string Choices_directory_path = Filesystem_directory_path + "choices/";
 
         public struct Choice
         {
@@ -132,9 +132,9 @@ namespace 烟尘记
 
 
         //存放Rebillion Qoutes的位置
-        public static string Rebillion_qoutes_file_path = "Rebillion Qoutes.txt";
+        public static string Rebillion_qoutes_file_path = Filesystem_directory_path + "Rebillion Qoutes.txt";
 
-        public static string[] Rebillion_qoutes = null;
+        public static string[] Rebillion_qoutes;
 
         public static void Rebillion_qoutes_read_in()
         {
@@ -148,7 +148,7 @@ namespace 烟尘记
 
 
         //存放存档的位置
-        public static string Saves_directory_path = "saves/";
+        public static string Saves_directory_path = Filesystem_directory_path + "saves/";
 
         public struct Save
         {
@@ -203,7 +203,7 @@ namespace 烟尘记
 
 
         //存放Options的位置
-        public static string Options_file_path = "Options.txt";
+        public static string Options_file_path = Filesystem_directory_path + "Options.txt";
 
         public struct Option
         {

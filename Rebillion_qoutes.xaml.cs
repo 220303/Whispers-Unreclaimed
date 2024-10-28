@@ -30,6 +30,10 @@ namespace 烟尘记
         private async void wait()
         {
 
+            //随机显示李任语录
+            Random rd = new();
+            Rebillion_words_textblock.Text = "       " + Data.Rebillion_qoutes[rd.Next(0,Data.Rebillion_qoutes.Length)];
+
             Task Task_load = Task.Run(() => Load());
 
             Task Task_wait = Task.Run(() => Thread.Sleep(3000));       //等待四秒
@@ -37,11 +41,6 @@ namespace 烟尘记
             await Task_load;
 
             await Task_wait;
-
-
-            //随机显示李任语录
-            //Random rd = new();
-            //Rebillion_words_textblock.Text = "       " + Data.Rebillion_qoutes[rd.Next(0, Data.Rebillion_qoutes.Length)];
 
             NavigationService.GetNavigationService(this).Navigate(new Game());           //跳转到Game界面
         }

@@ -13,6 +13,6 @@
     MouseDown="Page_MouseDown"
     mc:Ignorable="d">
     <Page.Background>
-        <ImageBrush ImageSource="Resource/image/0000.png" Stretch="Uniform" />
+        <SolidColorBrush Color="DodgerBlue"/>
     </Page.Background>
 </Page>

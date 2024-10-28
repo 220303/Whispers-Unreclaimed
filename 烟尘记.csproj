@@ -6,32 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <BaseOutputPath>T:\Code\[烟尘记]\烟尘记 [ Code ]\————烟尘记————\bin</BaseOutputPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="resource\image\0000.png" />
-    <None Remove="resource\image\0001.png" />
-    <None Remove="resource\image\0002.png" />
-    <None Remove="resource\image\Rebillion Quotes.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="resource\image\0000.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resource\image\0001.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resource\image\0002.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resource\image\Rebillion Quotes.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resource\" />
-  </ItemGroup>
 
 </Project>

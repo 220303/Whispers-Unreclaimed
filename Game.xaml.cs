@@ -38,24 +38,30 @@ namespace 烟尘记
         }
 
 
-        public async void Plot_print()
+        public void Plot_print()
         {
             //逐字输出剧情
 
             for (int i = 1; i <= Data.Nodes[game.Jump - 1].Plot.Length; i++)                                       //i指要输出的这一段剧情中的第几个字，而 i-1 指这个字对应的plot的序号
             {
-                PlotText.Text += Data.Nodes[game.Jump - 1].Plot[i - 1];
+
+
+                // 使用 Dispatcher 在 UI 线程上更新 PlotText
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    PlotText.Text += Data.Nodes[game.Jump - 1].Plot[i - 1];
+                    Plot_scrollviewer.ScrollToBottom();
+                });
 
                 //music(烟尘记游戏.jump, i);                                              //调用音乐函数，暂时还没写好。
 
-                await Task.Delay(Data.Options.Plot_print_speed);                        //这里是为了实验方便，成品后会去掉注释
+                Thread.Sleep(Data.Options.Plot_print_speed);                        //这里是为了实验方便，成品后会去掉注释
+                //await Task.Delay(Data.Options.Plot_print_speed);
 
-                Plot_scrollviewer.ScrollToBottom();
             }
 
             PlotText.Text += "\n";                                                      //输出完后换行，便于下一次输出。
 
-            now_mode = mode.wait_choices_print;
         }
 
 
@@ -127,7 +133,7 @@ namespace 烟尘记
 
 
 
-        private void Page_KeyDown(object sender, KeyEventArgs e)
+        private async void Page_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
@@ -145,7 +151,10 @@ namespace 烟尘记
 
                         now_mode = mode.printing;
 
-                        Plot_print();
+                        Task Task_Plot_print = Task.Run(() => Plot_print());
+                        await Task_Plot_print;
+
+                        now_mode = mode.wait_choices_print;
 
                         break;
 
@@ -178,7 +187,7 @@ namespace 烟尘记
             }
         }
 
-        private void Page_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private async void Page_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             switch (now_mode)
             {
@@ -186,7 +195,10 @@ namespace 烟尘记
 
                     now_mode = mode.printing;
 
-                    Plot_print();
+                    Task Task_Plot_print = Task.Run(() => Plot_print());
+                    await Task_Plot_print;
+
+                    now_mode = mode.wait_choices_print;
 
                     break;
 
