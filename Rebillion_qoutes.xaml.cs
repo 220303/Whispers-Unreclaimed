@@ -36,11 +36,11 @@ namespace 烟尘记
 
             Task Task_load = Task.Run(() => Load());
 
-            Task Task_wait = Task.Run(() => Thread.Sleep(3000));       //等待四秒
+            //Task Task_wait = Task.Run(() => Thread.Sleep(3000));       //等待四秒
 
             await Task_load;
 
-            await Task_wait;
+            //await Task_wait;
 
             NavigationService.GetNavigationService(this).Navigate(new Game());           //跳转到Game界面
         }

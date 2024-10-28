@@ -55,12 +55,15 @@ namespace 烟尘记
 
                 //music(烟尘记游戏.jump, i);                                              //调用音乐函数，暂时还没写好。
 
-                Thread.Sleep(Data.Options.Plot_print_speed);                        //这里是为了实验方便，成品后会去掉注释
+                //Thread.Sleep(Data.Options.Plot_print_speed);                        //这里是为了实验方便，成品后会去掉注释
                 //await Task.Delay(Data.Options.Plot_print_speed);
 
             }
 
-            PlotText.Text += "\n";                                                      //输出完后换行，便于下一次输出。
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                PlotText.Text += "\n";                                                      //输出完后换行，便于下一次输出。
+            });
 
         }
 
@@ -151,7 +154,8 @@ namespace 烟尘记
 
                         now_mode = mode.printing;
 
-                        Task Task_Plot_print = Task.Run(() => Plot_print());
+                        Task Task_Plot_print;
+                        Task_Plot_print= Task.Run(() => Plot_print());
                         await Task_Plot_print;
 
                         now_mode = mode.wait_choices_print;
@@ -170,17 +174,21 @@ namespace 烟尘记
 
                     case mode.wait_choose:                                                                                           //确认用户选择
 
-                        now_mode = mode.printing;
-
                         if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9))
                         {
+
+                            now_mode = mode.printing;
+
                             int choicenumber = ((int)e.Key + 6) % 10;              //把e.Key传递过来的枚举值（实际上是一个数字，代表了键盘上的某一个按键）转换为game.choose方法可以接受的值
                             game.Choose(choicenumber);
 
-                            Plot_print();
-                        }
 
-                        now_mode = mode.wait_choices_print;
+                            //输出下一段剧情
+                            Task_Plot_print = Task.Run(() => Plot_print());
+                            await Task_Plot_print;
+
+                            now_mode = mode.wait_choices_print;
+                        }
 
                         break;
                 }
@@ -215,7 +223,7 @@ namespace 烟尘记
         }                       //响应用户的鼠标单击输入(mode == 1|2)
 
 
-        private void choose_click(object sender, RoutedEventArgs e)
+        private async void choose_click(object sender, RoutedEventArgs e)
         {
             //若用户点击选项按钮所执行的操作：将按钮的name经处理（去掉之前不得不加的choice）后（剩下的就是数字，可以直接传给input）传给input，执行choose函数
 
@@ -228,7 +236,14 @@ namespace 烟尘记
 
             game.Choose(choose_number);
 
-            Plot_print();
+            //输出下一段剧情
+            now_mode = mode.printing;
+
+            Task Task_Plot_print = Task.Run(() => Plot_print());
+            await Task_Plot_print;
+
+            now_mode = mode.wait_choices_print;
+
         }                       //响应用户的鼠标单击输入(mode == 3)
 
 
