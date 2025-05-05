@@ -11,7 +11,7 @@
 
             Plot_font_size_Textbox.Text = Convert.ToString(Data.Option.Plot_font_size);
             Plot_print_speed_Textbox.Text = Convert.ToString(Data.Option.Plot_print_speed);
-            Music_volume_Textbox.Text = Convert.ToString(Data.Option.Music_volume);
+            Music_volume_Textbox.Text = Convert.ToString(Data.Option.Music_volume * 10000);
 
             this.Loaded += (s, e) => this.Focus();                                                               //确保焦点汇聚到page上
         }
@@ -31,7 +31,7 @@
             {
                 Data.Option.Plot_font_size = ToInt32(Plot_font_size_Textbox.Text);
                 Data.Option.Plot_print_speed = ToInt32(Plot_print_speed_Textbox.Text);
-                Data.Option.Music_volume = ToDouble(Music_volume_Textbox.Text)/10000.0;
+                Data.Option.Music_volume = ToDouble(Music_volume_Textbox.Text) / 10000.0;
                 Data.Global_music.Global_media_element.Volume = Data.Option.Music_volume;
 
                 //保存Options到文件

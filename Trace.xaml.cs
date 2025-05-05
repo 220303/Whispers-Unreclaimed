@@ -8,6 +8,7 @@
         public Trace(bool operation, bool back) //接受数字参数： 可/不可 操作   可/不可 退回
         {
             InitializeComponent();
+
             this.operation = operation;
             this.back = back;
             Saves_ListBox.ItemsSource = Data.Saves;

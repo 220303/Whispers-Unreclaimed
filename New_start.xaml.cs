@@ -1,6 +1,4 @@
-﻿using System.Windows.Controls;
-
-namespace 烟尘记
+﻿namespace 烟尘记
 {
     /// <summary>
     /// New_start.xaml 的交互逻辑

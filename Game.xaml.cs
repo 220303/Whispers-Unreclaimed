@@ -23,7 +23,7 @@
             InitializeComponent();
             this.Loaded += (s, e) => this.Focus();                                                               //确保焦点汇聚到page上
 
-            game = new(Data.Saves[Data.Option.Save_choose-1]);                                                   //初始化游戏逻辑对象（利用所选择的存档内容）
+            game = new(Data.Saves[Data.Option.Save_choose - 1]);                                                   //初始化游戏逻辑对象（利用所选择的存档内容）
 
             now_mode = mode.wait_plot_print;                                                                     //标准初始化前台游戏参数（与存档内容无关）
         }
@@ -35,6 +35,8 @@
             Data.Save_write_out();                                                                           //保存Saves到文件
             Data.Main_window.Page_frame.NavigationService.Navigate(new Trace(false, false));                  //跳转到Trace页面
         }
+
+
 
 
         public void Plot_print()
@@ -62,8 +64,6 @@
             });
 
         }
-
-
 
         private void Choice_print()
         {
@@ -102,30 +102,27 @@
                 int Button_count = 0;     //控制按扭之间的空白所需的计数器(此处foreach循环不能改为for循环，因为不是每个被遍历的choice都会被输出)
                 foreach (Data.Choice temp_choice in Data.Nodes[game.Jump - 1].Choices)
                 {
-                    if (temp_choice.Check(game.Record))
+                    //计数器自增(自增后的值代表第x个按钮)
+                    Button_count++;
+
+                    //创建按钮列
+                    Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7 / choices_count, GridUnitType.Star) });
+
+                    //创建按钮
+                    Button choicebutton = new()
                     {
-                        //计数器自增(自增后的值代表第x个按钮)
-                        Button_count++;
+                        Name = "Choice" + Convert.ToString(Data.Nodes[game.Jump - 1].Choices.IndexOf(temp_choice) + 1),  //由于button的name属性必须以字母开头，所以不得不在前面加上Choice,后面处理时会去掉
+                        Content = temp_choice.Content,
+                        Visibility = Visibility.Visible
+                    };
+                    Grid.SetColumn(choicebutton, Button_count * 2 - 1);              //将按钮填入为其创建的列中
+                    choicebutton.Click += new RoutedEventHandler(choose_click);      //给每一个choicebutton赋予一样的响应点击事件
+                    Choices_grid.Children.Add(choicebutton);                         //将每一个choicebutton添加到choicesdock中
 
-                        //创建按钮列
-                        Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7 / choices_count, GridUnitType.Star) });
-
-                        //创建按钮
-                        Button choicebutton = new()
-                        {
-                            Name = "Choice" + Convert.ToString(Data.Nodes[game.Jump - 1].Choices.IndexOf(temp_choice) + 1),  //由于button的name属性必须以字母开头，所以不得不在前面加上Choice,后面处理时会去掉
-                            Content = temp_choice.Content,
-                            Visibility = Visibility.Visible
-                        };
-                        Grid.SetColumn(choicebutton, Button_count * 2 - 1);              //将按钮填入为其创建的列中
-                        choicebutton.Click += new RoutedEventHandler(choose_click);      //给每一个choicebutton赋予一样的响应点击事件
-                        Choices_grid.Children.Add(choicebutton);                         //将每一个choicebutton添加到choicesdock中
-
-                        //创建按钮间留空(如果不是最后一个按钮的话)
-                        if (Button_count < choices_count)
-                        {
-                            Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(betweenButtonSpacingRatio, GridUnitType.Star) });
-                        }
+                    //创建按钮间留空(如果不是最后一个按钮的话)
+                    if (Button_count < choices_count)
+                    {
+                        Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(betweenButtonSpacingRatio, GridUnitType.Star) });
                     }
                 }
 
@@ -137,11 +134,14 @@
             }
 
 
- /*           if (game != null)                                //检查game是不是null，如果是，说明游戏已经到了结局，甚至都已经不在Game页面了。
-            {           
-            }
- */
+            /*           if (game != null)                                //检查game是不是null，如果是，说明游戏已经到了结局，甚至都已经不在Game页面了。
+                       {           
+                       }
+            */
         }
+
+
+
 
         private async void Page_KeyDown(object sender, KeyEventArgs e)
         {
@@ -162,7 +162,7 @@
                         now_mode = mode.printing;
 
                         Task Task_Plot_print;
-                        Task_Plot_print= Task.Run(() => Plot_print());
+                        Task_Plot_print = Task.Run(() => Plot_print());
                         await Task_Plot_print;
 
                         now_mode = mode.wait_choices_print;
@@ -188,6 +188,9 @@
 
                             int choicenumber = ((int)e.Key + 6) % 10;              //把e.Key传递过来的枚举值（实际上是一个数字，代表了键盘上的某一个按键）转换为game.choose方法可以接受的值
                             game.Choose(choicenumber);
+
+                            Choices_grid.Children.Clear();                                                   //把choicedock中的按钮清空
+                            Choices_grid.Visibility = Visibility.Collapsed;                                  //把choicesdock改成隐藏的（不占用空间）
 
 
                             //输出下一段剧情
@@ -236,12 +239,12 @@
 
             Button btn = sender as Button;                                                  //获取用户点击的那个按钮
             int choose_number = Convert.ToInt16((btn.Name).Substring(6));                   //储存用该按钮名称计算出的选项编号
+            game.Choose(choose_number);
 
 
             Choices_grid.Children.Clear();                                                   //把choicedock中的按钮清空
             Choices_grid.Visibility = Visibility.Collapsed;                                  //把choicesdock改成隐藏的（不占用空间）
 
-            game.Choose(choose_number);
 
             //输出下一段剧情
             now_mode = mode.printing;

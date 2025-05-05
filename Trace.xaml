@@ -11,34 +11,48 @@
     d:DesignWidth="800"
     Focusable="True"
     KeyDown="Page_KeyDown"
-    mc:Ignorable="d"
-    Tag="program">
+    Tag="program"
+    mc:Ignorable="d">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="50*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="6*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="50*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
         <ListBox
             x:Name="Saves_ListBox"
-            Margin="0,0,0,55"
+            Grid.Row="1"
+            Grid.Column="1"
             DisplayMemberPath="Name"
-            SelectionChanged="Saves_ListBox_SelectionChanged">
-        </ListBox>
+            SelectionChanged="Saves_ListBox_SelectionChanged" />
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
 
-        <Button
-            Name="New_save"
-            Width="114"
-            Height="35"
-            Margin="120,410,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Click="New_save_Click"
-            Content="新建存档" />
-        <Button
-            Name="Delete_save"
-            Width="114"
-            Height="35"
-            Margin="548,410,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Click="Delete_save_Click"
-            Content="删除存档" />
-
+            <Button
+                Name="New_save"
+                Grid.Column="1"
+                Click="New_save_Click"
+                Content="新建存档" />
+            <Button
+                Name="Delete_save"
+                Grid.Row="3"
+                Grid.RowSpan="2"
+                Grid.Column="3"
+                Click="Delete_save_Click"
+                Content="删除存档" />
+        </Grid>
     </Grid>
 </Page>

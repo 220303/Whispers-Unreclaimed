@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:烟尘记"
         mc:Ignorable="d"
+        
         Title="MainWindow" Height="540" Width="960">
     <Grid>
         <Frame x:Name="Page_frame" NavigationUIVisibility="Hidden">

@@ -1,6 +1,4 @@
-﻿using System.Windows.Controls;
-
-namespace 烟尘记
+﻿namespace 烟尘记
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -14,8 +12,13 @@ namespace 烟尘记
             //初始化全局Main_window对象
             Data.Main_window = this;
 
-            //初始化全局音乐播放器
-            Data.Global_music_start("program");
+            //必须等待页面初始化完成后才能初始化音乐播放器
+            Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                //初始化全局音乐播放器
+                Data.Global_music_start("program");
+            }, DispatcherPriority.Background);
+
 
 
             //——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -23,7 +26,8 @@ namespace 烟尘记
 
 
             //在Mainwindow中建立frame，用来承载所有的page，用Start作为初始页面
-            Page_frame.Content = new Frame() { Content = new Start() };   
+            Page_frame.Content = new Frame() { Content = new Start() };
+
 
             //如果是刚刚进入游戏(Saves.Count == 0)，则加载存档到Data.Saves(List)中
             if (Data.Saves.Count == 0)            
