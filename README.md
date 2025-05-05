@@ -109,7 +109,7 @@
 
 键盘：
 
-> 输入`Esc`返回上一个页面 (`Game`或`Start`)。
+> 输入`Shift`+`:`返回上一个页面 (`Game`或`Start`)。
 
 注意：未保存的`Options`更改将在离开`Option`页面时丢失。
 
@@ -133,15 +133,41 @@
 
 包含所有全局数据，包括`Choice`，`Rebillion Qoutes`，`Save`，`Option`的全部数据类型和方法。
 
+`Filesystem_directory_path`：游戏所有文件的根目录
+
+`Image_directory_path`：存放背景图片的位置
+
+`Main_window`：为`MainWindow`生成的一个全局对象，使得在其他`Page`中也能访问到`MainWindow`中的内容：
+
+* 通过`Data.MainWindow.Page_frame.NavigationService.GoBack();`来返回上一个页面。
+* 通过`Data.Main_window.Page_frame.NavigationService.Navigate(new Options());`来导航到新页面。
+* 通过`Data.Main_window.global_media_element`访问`MainWindow`中的音乐播放器。
+* 通过`Data.Main_window.Page_frame.Navigated += Change_music`监听`Frame`导航来更改音乐。
+* 通过`Data.Main_window.Close();`调用关闭代码。
+
+`Music_directory_path`：存放背景音乐的位置。
+
+`Global_music`：`Global_music_struct`，全局唯一静态音乐播放器结构，含有`Global_media_element`，`Current_music_page_group`，分别保存`MainWindow中的Global_media_element`，当前页面所属的`音乐播放页面分组`的记录。`Global_music`，全局唯一静态音乐播放器，用来播放背景音乐。`Global_music_start(string Current_music_page_group)`全局静态函数是用来初始化`Global_music`的，在程序启动时使用，`Change_music(object sender, NavigationEventArgs e)`是页面切换事件的处理程序，负责根据不同的`音乐播放页面分组`更换背景音乐。
+
+`Choices_directory_path`：存放`Choices`的位置
+
 `Choice`：`Choice`结构，含有`Content`，`Jump`，`condition`，分别代表选项文字，选项要跳转到的`Node`编号，选项可用的条件。`Choice(string content, int jump, List<string> condition)`是构造函数，`Check(List<string> check_record)`是自带的方法，用于根据用户游玩历史判断选项是否可用。
+
+`Plot_directory_path`：存放`Plots`的位置
 
 `Node(s)`：`Node`结构，含有`Plot`，`Choices`，分别代表节点的剧情内容和选项列表，`Node(string plot, List<Choice> choices)`是构造函数。`Nodes`是全局唯一的剧情节点列表，包含所有剧情。`Nodes_read_in()`全局静态函数是用来读取剧情的，在游戏启动时使用。
 
+`Rebillion_qoutes_file_path`：存放`Rebillion Qoutes`的位置
+
 `Rebillion Qoutes`：`Rebillion_qoutes`是全局唯一的李任语录(`string`类型数组)，`Rebillion_qoutes_read_in()`全局静态函数是用来读取李任语录文件的，在游戏启动时使用。
+
+`Saves_directory_path`：存放存档的位置
 
 `Save(s)`：`Save`结构，含有`Name`，`Jump`，`Record`，分别代表存档的名字，玩到的剧情`Node`编号，历史选择。`Saves`时全局唯一的存档列表，包含玩家创建的多个存档，`Save_read_in()`，`Save_write_out()`两个全局静态函数是用来读取和写入存档文件的，在游戏启动和保存文档时使用。
 
-`Option(s)`：`Option`结构，含有`Save_choose`，`Plot_font_size`，`Plot_print_speed`，`Music_volume`，分别代表默认选择的存档，字体大小，文字输出速度，音乐大小。`Options`是全局唯一的`Option`结构的实例，但注意它并不是一个列表之类的东西，加`s`只是因为不能和类型`Option`重名。`Options_read_in()`，`Options_wrtie_out()`两个全局静态函数是用来读取和写入设置文件的，在游戏启动和保存设置时使用。
+`Options_file_path`：存放`Options`的位置
+
+`Option`：`Option_struct`结构，含有`Save_choose`，`Plot_font_size`，`Plot_print_speed`，`Music_volume`，分别代表默认选择的存档，字体大小，文字输出速度，音乐大小。`Option`是全局唯一的`Option_struct`结构的实例。`Option_read_in()`，`Option_wrtie_out()`两个全局静态函数是用来读取和写入设置文件的，在游戏启动和保存设置时使用。
 
 
 ## 未来计划：
