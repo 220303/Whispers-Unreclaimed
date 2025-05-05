@@ -11,7 +11,8 @@
     d:DesignWidth="800"
     Focusable="True"
     KeyDown="Page_KeyDown"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Tag="program">
     <Grid>
         <ListBox
             x:Name="Saves_ListBox"
@@ -24,7 +25,7 @@
             Name="New_save"
             Width="114"
             Height="35"
-            Margin="115,410,0,0"
+            Margin="120,410,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Click="New_save_Click"
@@ -38,7 +39,6 @@
             VerticalAlignment="Top"
             Click="Delete_save_Click"
             Content="删除存档" />
-
 
     </Grid>
 </Page>

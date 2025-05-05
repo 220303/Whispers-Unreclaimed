@@ -8,6 +8,7 @@
     Title="Rebillion_qoutes"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    Tag="game"
     mc:Ignorable="d">
     <Page.Background>
         <SolidColorBrush Color="Black" />

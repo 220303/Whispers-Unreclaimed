@@ -1,6 +1,4 @@
-﻿using System.Windows.Media.Media3D;
-
-namespace 烟尘记
+﻿namespace 烟尘记
 {
     /// <summary>
     /// Game.xaml 的交互逻辑
@@ -25,16 +23,17 @@ namespace 烟尘记
             InitializeComponent();
             this.Loaded += (s, e) => this.Focus();                                                               //确保焦点汇聚到page上
 
-            game = new(Data.Saves[Data.Options.Save_choose-1]);                                                   //初始化游戏逻辑对象（利用所选择的存档内容）
+            game = new(Data.Saves[Data.Option.Save_choose-1]);                                                   //初始化游戏逻辑对象（利用所选择的存档内容）
 
             now_mode = mode.wait_plot_print;                                                                     //标准初始化前台游戏参数（与存档内容无关）
         }
 
-        private void finish_view()                                                               //结局时执行的结尾操作
+        private void finish_view()                                                                           //结局时执行的结尾操作
         {
-            game.Dispose();                                                                      //调用game的Dispose方法，实际上是保存游戏进度
-            game = null;                                                                         //将game对象放入垃圾处理器，等待.net平台回收
-            NavigationService.GetNavigationService(this).Navigate(new Trace(false, false));                  //跳转到Trace页面
+            game.Save_game();                                                                                //保存游戏进度
+            game = null;                                                                                     //将game对象放入垃圾处理器，等待.net平台回收
+            Data.Save_write_out();                                                                           //保存Saves到文件
+            Data.Main_window.Page_frame.NavigationService.Navigate(new Trace(false, false));                  //跳转到Trace页面
         }
 
 
@@ -53,10 +52,7 @@ namespace 烟尘记
                     Plot_scrollviewer.ScrollToBottom();
                 });
 
-                //music(烟尘记游戏.jump, i);                                              //调用音乐函数，暂时还没写好。
-
-                //Thread.Sleep(Data.Options.Plot_print_speed);                        //这里是为了实验方便，成品后会去掉注释
-                //await Task.Delay(Data.Options.Plot_print_speed);
+                Thread.Sleep(Data.Option.Plot_print_speed);                        //这里是为了实验方便，成品后会去掉注释
 
             }
 
@@ -71,80 +67,91 @@ namespace 烟尘记
 
         private void Choice_print()
         {
-            if (game != null)                                //检查game是不是null，如果是，说明游戏已经到了结局，甚至都已经不在Game页面了。
+            if (Data.Nodes[game.Jump - 1].Choices == null)             //如果没有选项，说明是结局，立即触发结局事件
+            {
+                finish_view();
+            }
+            else                                                       //如果有选项，则输出选项
             {
 
-                
-                if (Data.Nodes[game.Jump - 1].Choices == null)             //如果没有选项，说明是结局，立即触发结局事件
+                //输出选项到屏幕
+                Choices_grid.Visibility = Visibility.Visible;                     //把dockpannal改成可见的（默认是隐藏的）
+
+
+                //统计需要输出几个选项
+                int choices_count = 0;
+                foreach (Data.Choice temp_choice in Data.Nodes[game.Jump - 1].Choices)
                 {
-                    finish_view();
+                    if (temp_choice.Check(game.Record))
+                        choices_count++;
                 }
-                else                                                       //如果有选项，则输出选项
+
+                //计算 左侧留空，按钮间留空，右侧留空 的相对大小
+                double Grid_unit_width = 0.3 / (choices_count - 1 + 3);
+                double leftRightSpacingRatio = 3 * Grid_unit_width;
+                double betweenButtonSpacingRatio = Grid_unit_width;
+                double rightRightSpacingRatio = 3 * Grid_unit_width;
+
+                // 清空之前的列定义
+                Choices_grid.ColumnDefinitions.Clear();
+
+                //创建左侧留空
+                Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(leftRightSpacingRatio, GridUnitType.Star) });
+
+                //创建按钮,输出选项
+                int Button_count = 0;     //控制按扭之间的空白所需的计数器(此处foreach循环不能改为for循环，因为不是每个被遍历的choice都会被输出)
+                foreach (Data.Choice temp_choice in Data.Nodes[game.Jump - 1].Choices)
                 {
-
-                    //输出选项到屏幕
-                    ChoicesDock.Visibility = Visibility.Visible;                     //把dockpannal改成可见的（默认是隐藏的）
-
-
-                    //统计需要输出几个选项
-                    int choices_count = 0;
-                    foreach (Data.Choice temp_choice in Data.Nodes[game.Jump - 1].Choices)
+                    if (temp_choice.Check(game.Record))
                     {
-                        if (temp_choice.Check(game.Record))
-                            choices_count++;
-                    }
+                        //计数器自增(自增后的值代表第x个按钮)
+                        Button_count++;
 
+                        //创建按钮列
+                        Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7 / choices_count, GridUnitType.Star) });
 
-                    //创建按钮输出选项
-                    foreach (Data.Choice temp_choice in Data.Nodes[game.Jump - 1].Choices)
-                    {
-                        if (temp_choice.Check(game.Record))
+                        //创建按钮
+                        Button choicebutton = new()
                         {
-                            Button choicebutton = new()
-                            {
-                                Name = "Choice" + Convert.ToString(Data.Nodes[game.Jump - 1].Choices.IndexOf(temp_choice) + 1),  //由于button的name属性必须以字母开头，所以不得不在前面加上Choice,后面处理时会去掉
-                                Content = temp_choice.Content,
-                                Width = ChoicesDock.Width / choices_count,
-                                Visibility = Visibility.Visible
-                            };
-                            choicebutton.Click += new RoutedEventHandler(choose_click);     //给每一个choicebutton赋予一样的响应点击事件
-                            ChoicesDock.Children.Add(choicebutton);                         //将每一个choicebutton添加到choicesdock中
+                            Name = "Choice" + Convert.ToString(Data.Nodes[game.Jump - 1].Choices.IndexOf(temp_choice) + 1),  //由于button的name属性必须以字母开头，所以不得不在前面加上Choice,后面处理时会去掉
+                            Content = temp_choice.Content,
+                            Visibility = Visibility.Visible
+                        };
+                        Grid.SetColumn(choicebutton, Button_count * 2 - 1);              //将按钮填入为其创建的列中
+                        choicebutton.Click += new RoutedEventHandler(choose_click);      //给每一个choicebutton赋予一样的响应点击事件
+                        Choices_grid.Children.Add(choicebutton);                         //将每一个choicebutton添加到choicesdock中
+
+                        //创建按钮间留空(如果不是最后一个按钮的话)
+                        if (Button_count < choices_count)
+                        {
+                            Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(betweenButtonSpacingRatio, GridUnitType.Star) });
                         }
                     }
-
                 }
+
+                //创建右侧留空
+                Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(rightRightSpacingRatio, GridUnitType.Star) });
+
+                // 强制更新布局
+                Choices_grid.UpdateLayout();
             }
+
+
+ /*           if (game != null)                                //检查game是不是null，如果是，说明游戏已经到了结局，甚至都已经不在Game页面了。
+            {           
+            }
+ */
         }
-
-
-        private void music(int plotnumber, int wordnumber)                                             //music函数  主要功能：播放音乐
-        {
-            try                                                                       //使用地毯式搜索
-            {
-                MediaPlayer player = new();
-                player.Open(new Uri("/" + plotnumber + " " + wordnumber + ".mp3", UriKind.RelativeOrAbsolute));              //音乐查找
-                player.Play();
-            }
-            catch (System.IO.FileNotFoundException)                                   //异常则不处理
-            {
-                return;
-            }
-        }
-
-
-
-
-
 
         private async void Page_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
-                NavigationService.GetNavigationService(this).Navigate(new Pause(game));          //跳转到Pause界面
+                Data.Main_window.Page_frame.NavigationService.Navigate(new Pause(game));          //跳转到Pause界面
             }
             else if ((e.KeyboardDevice.Modifiers == ModifierKeys.Shift) && (e.Key == Key.OemSemicolon))                //输入 shift+; 进入Option界面
             {
-                NavigationService.GetNavigationService(this).Navigate(new Option());          //跳转到Option界面
+                Data.Main_window.Page_frame.NavigationService.Navigate(new Options());          //跳转到Option界面
             }
             else if ((e.Key != Key.LeftShift) && (e.Key != Key.RightShift))                   //按其余任意键（不离开游戏）
             {
@@ -231,8 +238,8 @@ namespace 烟尘记
             int choose_number = Convert.ToInt16((btn.Name).Substring(6));                   //储存用该按钮名称计算出的选项编号
 
 
-            ChoicesDock.Children.Clear();                                                   //把choicedock中的按钮清空
-            ChoicesDock.Visibility = Visibility.Collapsed;                                  //把choicesdock改成隐藏的（不占用空间）
+            Choices_grid.Children.Clear();                                                   //把choicedock中的按钮清空
+            Choices_grid.Visibility = Visibility.Collapsed;                                  //把choicesdock改成隐藏的（不占用空间）
 
             game.Choose(choose_number);
 

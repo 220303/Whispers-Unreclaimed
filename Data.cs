@@ -1,18 +1,102 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Documents;
-using static 烟尘记.Data;
-
-namespace 烟尘记
+﻿namespace 烟尘记
 {
     public static class Data
     {
+
+        //游戏所有文件的根目录
         public static string Filesystem_directory_path = "../Filesystem/";
+
+        //存放背景图片的位置
+        public static string Image_directory_path = Filesystem_directory_path + "Resource/image/";
+
+
+
+
+
+
+
+        //为MainWindow生成的一个全局对象，使得在其他Page中也能访问到MainWindow中的内容，比如通过MainWindow.Page_frame来切换页面来切换页面
+        public static MainWindow Main_window;
+
+
+
+
+
+
+        //存放背景音乐的位置
+        public static string Music_directory_path = Filesystem_directory_path + "Resource/music/";
+
+        public struct Global_music_struct
+        {
+            //保存 Global_media_element
+            public MediaElement Global_media_element;
+            //当前页面所属音乐播放组的记录
+            public string Current_music_page_group;
+        }
+
+        //全局唯一静态音乐播放器
+        public static Global_music_struct Global_music;
+
+
+        public static void Global_music_start(string Current_music_page_group)
+        {
+
+            //初始化全局音频播放器
+            Data.Global_music.Global_media_element = Data.Main_window.global_media_element;
+
+            //设置开始时的音频组标识
+            Data.Global_music.Current_music_page_group = Current_music_page_group;
+
+            //设置音频播放器开始播放游戏背景音乐
+            Data.Global_music.Global_media_element.Source = new Uri(Data.Music_directory_path + "程序背景音.mp3", UriKind.RelativeOrAbsolute);
+
+            //设置音频循环播放
+            Data.Global_music.Global_media_element.MediaEnded += (s, e) =>
+            {
+                Data.Global_music.Global_media_element.Position = TimeSpan.Zero;
+                Data.Global_music.Global_media_element.Play();
+            };
+
+            // 监听Frame导航来更改音乐
+            Data.Main_window.Page_frame.Navigated += Change_music;
+        }
+
+        private static void Change_music(object sender, NavigationEventArgs e)
+        {
+            // 关键：从页面获取音频组标识
+            FrameworkElement page = e.Content as FrameworkElement;
+            String new_music_page_group = page?.Tag?.ToString(); // 使用Tag存储音频组名
+
+            if ((new_music_page_group != Data.Global_music.Current_music_page_group) && (new_music_page_group != "all"))
+            {
+                // 停止当前音频
+                Data.Global_music.Global_media_element.Stop();
+                // 根据新的音频组标识设置对应的音频
+                switch (new_music_page_group)
+                {
+                    case "program":
+                        Data.Global_music.Global_media_element.Source = new Uri(Data.Music_directory_path + "程序背景音.mp3", UriKind.RelativeOrAbsolute);
+                        break;
+                    case "game":
+                        Data.Global_music.Global_media_element.Source = new Uri(Data.Music_directory_path + "游戏背景音.wav", UriKind.RelativeOrAbsolute);
+                        break;
+                }
+
+                // 播放新音频
+                Data.Global_music.Global_media_element.Play();
+                //更改当前页面分组的记录
+                Data.Global_music.Current_music_page_group = new_music_page_group;
+            }
+        }
+
+
+
+
+
+
+
+
+
         //存放Plots的位置
         public static string Plot_directory_path = Filesystem_directory_path+"plots/";
         //存放Choices的位置
@@ -20,14 +104,13 @@ namespace 烟尘记
 
         public struct Choice
         {
-            /*
-             public Choice(string content,int jump,List<string> condition) 
-             {
-                 this.content = content;
-                 this.jump = jump;
-                 this.condition = condition;
-             }
-            */
+            public Choice(string content, int jump, List<string> condition)
+            {
+                this.Content = content;
+                this.Jump = jump;
+                this.condition = condition;
+            }
+
             public string Content;
             public int Jump;
             public List<string> condition;
@@ -95,7 +178,16 @@ namespace 烟尘记
                         //如果这个选项存在,就把它创建并加入temp_choices,如果没有condition，那就填null，一旦全部添加完毕立刻结束无限循环
                         if (File.Exists(Choices_directory_path + Path.GetFileNameWithoutExtension(sort_plot_files[i - 1]) + "/" + j + ".txt"))
                         {
-                            Choice temp_choice;
+                            //创建选项，设置Jump和Content，暂时设置condition为null
+                            Choice temp_choice = new Choice(File.ReadAllText(Choices_directory_path + Path.GetFileNameWithoutExtension(sort_plot_files[i - 1]) + "/" + j + ".txt"), ToInt32(File.ReadAllText(Choices_directory_path + Path.GetFileNameWithoutExtension(sort_plot_files[i - 1]) + "/" + j + "j.txt")), null);
+                            //检查选项是否有条件，若有则赋值，若无则保持null
+                            if (File.Exists(Choices_directory_path + Path.GetFileNameWithoutExtension(sort_plot_files[i - 1]) + "/" + j + "C.txt"))
+                            {
+                                temp_choice.condition = new List<string>(File.ReadAllText(Choices_directory_path + Path.GetFileNameWithoutExtension(sort_plot_files[i - 1]) + "/" + j + "C.txt").Split(' '));
+                            }
+
+                            /*
+                            以上创建temp_choice的另一种实现(不需要Choice的构造函数)
                             temp_choice.Content = File.ReadAllText(Choices_directory_path + Path.GetFileNameWithoutExtension(sort_plot_files[i - 1]) + "/" + j + ".txt");
                             temp_choice.Jump = ToInt32(File.ReadAllText(Choices_directory_path + Path.GetFileNameWithoutExtension(sort_plot_files[i - 1]) + "/" + j + "j.txt"));
                             if (File.Exists(Choices_directory_path + Path.GetFileNameWithoutExtension(sort_plot_files[i - 1]) + "/" + j + "C.txt"))
@@ -106,6 +198,8 @@ namespace 烟尘记
                             {
                                 temp_choice.condition = null;
                             }
+                            */
+
                             temp_choices.Add(temp_choice);
                         }
                         else
@@ -148,7 +242,7 @@ namespace 烟尘记
 
 
         //存放存档的位置
-        public static string Saves_directory_path = Filesystem_directory_path + "saves/";
+        public static string Saves_directory_path = Filesystem_directory_path + "Saves/";
 
         public struct Save
         {
@@ -205,42 +299,42 @@ namespace 烟尘记
         //存放Options的位置
         public static string Options_file_path = Filesystem_directory_path + "Options.txt";
 
-        public struct Option
+        public struct Option_struct
         {
-            public int Save_choose { get; set; }
+            public int Save_choose { get; set; }           //注意，从1开始计数，不是从0开始
             public int Plot_font_size { get; set; }
             public int Plot_print_speed { get; set; }
-            public int Music_volume { get; set; }
+            public double Music_volume { get; set; }
+
         }
 
-        public static Option Options;
+        public static Option_struct Option = new Option_struct();
 
-
-        public static void Options_read_in()
+        public static void Option_read_in()
         {
             string savecontent = File.ReadAllText(Options_file_path);                               //从设置文件中读取所有内容
 
             string[] content_array = null;
             content_array = savecontent.Split('\n');
-            Options.Save_choose = ToInt16(content_array[0]);
-            Options.Plot_font_size = ToInt16(content_array[1]);
-            Options.Plot_print_speed = ToInt16(content_array[2]);
-            Options.Music_volume = ToInt16(content_array[3]);
+            Data.Option.Save_choose = ToInt16(content_array[0]);
+            Data.Option.Plot_font_size = ToInt16(content_array[1]);
+            Data.Option.Plot_print_speed = ToInt16(content_array[2]);
+            Data.Option.Music_volume = ToDouble(content_array[3]) / 10000.0;
+            Data.Global_music.Global_media_element.Volume = Data.Option.Music_volume;
         }
 
-        public static void Options_wrtie_out()
+        public static void Option_wrtie_out()
         {
             string[] content_array = new string[4];
-            content_array[0] = Convert.ToString(Options.Save_choose);
-            content_array[1] = Convert.ToString(Options.Plot_font_size);
-            content_array[2] = Convert.ToString(Options.Plot_print_speed);
-            content_array[3] = Convert.ToString(Options.Music_volume);
+            content_array[0] = Convert.ToString(Data.Option.Save_choose);
+            content_array[1] = Convert.ToString(Data.Option.Plot_font_size);
+            content_array[2] = Convert.ToString(Data.Option.Plot_print_speed);
+            content_array[3] = Convert.ToString(Data.Option.Music_volume);
 
             string new_options_content = string.Join('\n', content_array);                        //将数据重新组合成一个字符串
 
             File.WriteAllText(Options_file_path, new_options_content);                            //覆写掉设置文件内原有内容
         }
-
 
 
     }

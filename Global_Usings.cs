@@ -10,3 +10,5 @@ global using System.Windows.Threading;
 global using static System.Convert;
 global using System.ComponentModel;
 global using Microsoft.Win32;
+global using System.Collections.ObjectModel;
+global using System.Text.RegularExpressions;

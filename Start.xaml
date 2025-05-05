@@ -11,7 +11,8 @@
     Focusable="True"
     KeyDown="Page_KeyDown"
     MouseDown="Page_MouseDown"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Tag="program">
     <Page.Background>
         <SolidColorBrush Color="DodgerBlue"/>
     </Page.Background>

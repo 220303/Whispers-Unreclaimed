@@ -3,15 +3,145 @@
 
 ## 基本架构：
 * #### MainWindows
-  > Start   
-  > Trace  
-  > Option  
+  > Start
+  >
+  > Rebillion qoutes
+  >
+  > New start   
+  >
   > Game  
+  >
   > Pause
+  >
+  > Trace  
+  >
+  > Option  
 * #### 后台类库  
   > 烟尘记游戏  
-  > Choice  
-  > Data  
+  >
+  > Data 
+
+## 开发设计：
+
+##### `MainWindows`：
+
+作为游戏的主窗口，也是唯一的窗口，所有的游戏界面都作为页面在其上切换，采用`Frame`框架来承载页面，并且隐藏导航栏。它的构造函数包括初始化`Frame`和加载`Start`页面，它的析构函数种包含写入存档和设置文件。
+
+##### `Start`页面：
+
+用户一进入游戏，就会处在`Start`页面上，`Start`页面会显示封面，可以接受输入并跳转到`Rebillion qoutes`页面，`New start`页面，`Trace`页面，`Option`页面。
+
+进入游戏：如果什么都存档都没有，则进入`New_start`页面创建新的存档；如果有存档，则进入`Rebillion qoutes`页面加载存档。
+
+鼠标：点击屏幕任意区域进入游戏。
+
+键盘：
+
+> 输入 `shift`+`;`进入`Option`页面。
+>
+> 输入 `shift`+`a`进入`Trace`页面。
+>
+> 按其余任意键进入游戏。
+
+##### `New start`页面:
+
+返回`Start`页面。
+
+新建存档，设置存档名字然后进入存档。
+
+##### `Rebillion qoutes`页面：
+
+输出李任语录。
+
+后台加载`Nodes`，如果没有可加载的就等`4`秒。
+
+##### `Game`页面:
+
+游戏界面，所有游戏操作都在此页面进行。总的来说，程序会轮流输出剧情(逐字输出)和选项，用户做出选择后又会输出新的剧情，用户的历史选择会影响当下可以做出的选择。
+
+鼠标：
+
+> 点击选项按钮做出选择。
+>
+> 点击点击屏幕任意区域输出剧情(仅在第一次进入`Game`页面时需要)。
+
+键盘：
+
+> 输入 `shift`+`;`进入`Option`页面。
+>
+> 输入`Esc`进入`Pause`页面。
+>
+> 输入数字键做出选择(前提是有数字对应的选项)。
+>
+> 输入其余任意键输出剧情(仅在第一次进入`Game`页面时需要)。
+
+##### `Pause`页面：
+
+玩家可以保存进度，退出到`Start`页面，直接退出游戏(退出到桌面)。
+
+键盘：
+
+> 输入`Esc`返回`Game`页面。
+
+注意保存是立即写入文件的持久化保存，且不可撤销。
+
+注意未保存直接退出会丢失所有本次游玩的进度。
+
+##### `Trace`页面：
+
+按名称排序显示存档列表，用户可以选择一个存档作为活动存档(改变了`Options`中的`Save_choose`并立即写入`Options`文件)，下次进入游戏时会默认进入活动存档。
+
+游戏结局时会展示`Trace`页面。
+
+键盘：
+
+> 输入`Esc`返回`Start`页面 (对于游戏结局时显示的`Trace`页面而言，是重新回到`Start`页面)。
+
+##### `Option`页面：
+
+玩家可以更改`Options`中的`Plot_font_size`，`Plot_print_speed`，`Music_volume`，并保存(立即写入`Options`文件)。
+
+`Plot_font_size`：字体大小
+
+`Plot_print_speed`：逐字输出速度
+
+`Music_volume`：介于`0-10000`间的整数。
+
+键盘：
+
+> 输入`Esc`返回上一个页面 (`Game`或`Start`)。
+
+注意：未保存的`Options`更改将在离开`Option`页面时丢失。
+
+注意：不合法的`Options`更改在保存时不会写入`Options`文件，若此时离开`Option`页面，原数据不会丢失。
+
+##### `烟尘记游戏`类：
+
+其实例代表一局戏，在游戏开始时创建，游戏结束时销毁。
+
+`Jump`：读取自某个存档`Save`，代表接下来要输出的`Node`编号。
+
+`Record`：读取自某个存档`Save`，代表该存档过去的游戏历史。
+
+`烟尘记游戏(Data.Save save)`构造函数：给定一个存档`Save`，可以构造一个`烟尘记游戏`的实例。
+
+`Save_game()`函数：用于保存进度到程序内的`Saves`。
+
+`Choose(int input)`：根据玩家的选择切换到下一个`Node`。
+
+##### `Data`静态类：
+
+包含所有全局数据，包括`Choice`，`Rebillion Qoutes`，`Save`，`Option`的全部数据类型和方法。
+
+`Choice`：`Choice`结构，含有`Content`，`Jump`，`condition`，分别代表选项文字，选项要跳转到的`Node`编号，选项可用的条件。`Choice(string content, int jump, List<string> condition)`是构造函数，`Check(List<string> check_record)`是自带的方法，用于根据用户游玩历史判断选项是否可用。
+
+`Node(s)`：`Node`结构，含有`Plot`，`Choices`，分别代表节点的剧情内容和选项列表，`Node(string plot, List<Choice> choices)`是构造函数。`Nodes`是全局唯一的剧情节点列表，包含所有剧情。`Nodes_read_in()`全局静态函数是用来读取剧情的，在游戏启动时使用。
+
+`Rebillion Qoutes`：`Rebillion_qoutes`是全局唯一的李任语录(`string`类型数组)，`Rebillion_qoutes_read_in()`全局静态函数是用来读取李任语录文件的，在游戏启动时使用。
+
+`Save(s)`：`Save`结构，含有`Name`，`Jump`，`Record`，分别代表存档的名字，玩到的剧情`Node`编号，历史选择。`Saves`时全局唯一的存档列表，包含玩家创建的多个存档，`Save_read_in()`，`Save_write_out()`两个全局静态函数是用来读取和写入存档文件的，在游戏启动和保存文档时使用。
+
+`Option(s)`：`Option`结构，含有`Save_choose`，`Plot_font_size`，`Plot_print_speed`，`Music_volume`，分别代表默认选择的存档，字体大小，文字输出速度，音乐大小。`Options`是全局唯一的`Option`结构的实例，但注意它并不是一个列表之类的东西，加`s`只是因为不能和类型`Option`重名。`Options_read_in()`，`Options_wrtie_out()`两个全局静态函数是用来读取和写入设置文件的，在游戏启动和保存设置时使用。
 
 
 ## 未来计划：

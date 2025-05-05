@@ -1,6 +1,6 @@
 ﻿namespace 烟尘记
 {
-    public class 烟尘记游戏:IDisposable
+    public class 烟尘记游戏
     {
 
         public 烟尘记游戏(Data.Save save)
@@ -10,13 +10,13 @@
             Record = save.Record;                                                  
         }
 
-        public void Dispose()                                                             //game生命周期结束时调用，用于保存游戏进度
+        public void Save_game()                                                             //game生命周期结束时调用，用于保存游戏进度
         {
             //保存游戏进度到存档列表的对应值
-            Data.Save new_save = Data.Saves[Data.Options.Save_choose-1];                 //其余值不变
+            Data.Save new_save = Data.Saves[Data.Option.Save_choose-1];                 //其余值不变
             new_save.Jump = Jump;
             new_save.Record = Record;
-            Data.Saves[Data.Options.Save_choose-1]= new_save;
+            Data.Saves[Data.Option.Save_choose-1]= new_save;
         }
 
 

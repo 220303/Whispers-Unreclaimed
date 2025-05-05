@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace 烟尘记
 {
     /// <summary>
-    /// Save.xaml 的交互逻辑
+    /// Save_detail.xaml 的交互逻辑
     /// </summary>
-    public partial class Save : Page
+    public partial class Save_detail : Page
     {
-        public Save()
+        public Save_detail()
         {
             InitializeComponent();
         }

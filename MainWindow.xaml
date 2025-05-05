@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:烟尘记"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Frame x:Name="FrameWork" NavigationUIVisibility="Hidden">
+        Title="MainWindow" Height="540" Width="960">
+    <Grid>
+        <Frame x:Name="Page_frame" NavigationUIVisibility="Hidden">
             <!--这里的属性NavigationUIVisibility是用于设置是否隐藏上面的导航栏，如果没有这个，用导航方法跳转到另一个界面之后上面会出现导航条，类似于IE浏览器的前进和后退样式-->
-    </Frame>
+        </Frame>
+        <MediaElement x:Name="global_media_element" LoadedBehavior="Manual"/>
+    </Grid>
 </Window>

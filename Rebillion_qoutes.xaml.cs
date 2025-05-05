@@ -1,19 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-namespace 烟尘记
+﻿namespace 烟尘记
 {
     /// <summary>
     /// Rebillion_qoutes.xaml 的交互逻辑
@@ -34,19 +19,21 @@ namespace 烟尘记
             Random rd = new();
             Rebillion_words_textblock.Text = "       " + Data.Rebillion_qoutes[rd.Next(0,Data.Rebillion_qoutes.Length)];
 
+            //加载所有剧情和选项
             Task Task_load = Task.Run(() => Load());
 
-            //Task Task_wait = Task.Run(() => Thread.Sleep(3000));       //等待四秒
+            Task Task_wait = Task.Run(() => Thread.Sleep(3000));       //等待四秒，(如果最终剧情不够加载四秒，就凑够四秒)
 
             await Task_load;
 
-            //await Task_wait;
+            await Task_wait;    //对应于上面的等待四秒
 
-            NavigationService.GetNavigationService(this).Navigate(new Game());           //跳转到Game界面
+            Data.Main_window.Page_frame.NavigationService.Navigate(new Game());           //跳转到Game界面
         }
 
         private void Load()
         {
+            //如果是游戏启动后第一次开始一局游戏(此时没加载过Nodes，则Data.Nodes.Count就是0)，则读取所有剧情和选项，如果之前已经玩过一局或多局游戏，则不需要读取
             if (Data.Nodes.Count == 0)
                 Data.Nodes_read_in();
         }

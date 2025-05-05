@@ -1,22 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Shell;
-
-namespace 烟尘记
+﻿namespace 烟尘记
 {
     /// <summary>
     /// Trace.xaml 的交互逻辑
@@ -29,9 +11,18 @@ namespace 烟尘记
             this.operation = operation;
             this.back = back;
             Saves_ListBox.ItemsSource = Data.Saves;
-            Saves_ListBox.SelectedItem = Data.Saves[Data.Options.Save_choose-1];                                   //显示正在哪个存档中
+
+            if(Data.Option.Save_choose != 0)                                                             //刚安装好游戏时默认是0，此时不高亮SelectItem(显蓝)
+                Saves_ListBox.SelectedItem = Data.Saves[Data.Option.Save_choose - 1];                    //通过高亮SelectItem(显蓝)显示选中的存档
+
+            if (operation ==false)
+            {
+                New_save.Visibility = Visibility.Collapsed;
+                Delete_save.Visibility = Visibility.Collapsed;
+            }
+
             Saves_ListBox.Background = Brushes.AliceBlue;
-            this.Loaded += (s, e) => this.Focus();                                                               //确保焦点汇聚到page上
+            this.Loaded += (s, e) => this.Focus();                                                        //确保焦点汇聚到page上
         }
 
 
@@ -48,12 +39,12 @@ namespace 烟尘记
             {
                 if ((e.KeyboardDevice.Modifiers == ModifierKeys.Shift) && (e.Key == Key.A))
                 {
-                    NavigationService.GetNavigationService(this).GoBack();
+                    Data.Main_window.Page_frame.NavigationService.GoBack();
                 }
             }
             else
             {
-                NavigationService.GetNavigationService(this).Navigate(new Start());          //跳转到Start界面
+                Data.Main_window.Page_frame.NavigationService.Navigate(new Start());          //跳转到Start界面
             }
         }
 
@@ -67,7 +58,8 @@ namespace 烟尘记
                 if (Saves_ListBox.SelectedItem != null)
                 {
                     Data.Save selected = (Data.Save)Saves_ListBox.SelectedItem;
-                    Data.Options.Save_choose = Data.Saves.IndexOf(selected)+1;
+                    Data.Option.Save_choose = Data.Saves.IndexOf(selected)+1;
+                    Data.Option_wrtie_out();
                 }
             }
         }
@@ -81,9 +73,10 @@ namespace 烟尘记
                 if (Saves_ListBox.SelectedItem != null)
                 {
                     Data.Save selected = (Data.Save)Saves_ListBox.SelectedItem;
-                    if (Data.Options.Save_choose == Data.Saves.IndexOf(selected))
+                    if (Data.Option.Save_choose == Data.Saves.IndexOf(selected))
                     {
-                        Data.Options.Save_choose -= 1;
+                        Data.Option.Save_choose =0;
+                        //Data.Options_wrtie_out();
                     }
                     Data.Saves.Remove(selected);
                     File.Delete(Data.Saves_directory_path + selected.Name + ".txt");
@@ -93,7 +86,10 @@ namespace 烟尘记
 
         private void New_save_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.GetNavigationService(this).Navigate(new New_start());           //跳转到New_start界面
+            if (operation)
+            {
+                Data.Main_window.Page_frame.NavigationService.Navigate(new New_start());           //跳转到New_start界面
+            }
         }
     }
 }
