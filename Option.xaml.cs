@@ -9,9 +9,9 @@
         {
             InitializeComponent();
 
-            Plot_font_size_Textbox.Text = Convert.ToString(Data.Option.Plot_font_size);
-            Plot_print_speed_Textbox.Text = Convert.ToString(Data.Option.Plot_print_speed);
-            Music_volume_Textbox.Text = Convert.ToString(Data.Option.Music_volume * 10000);
+            Plot_font_size_Textbox.Text = Convert.ToString(Option.plot_font_size);
+            Plot_print_speed_Textbox.Text = Convert.ToString(Option.plot_print_speed);
+            Music_volume_Textbox.Text = Convert.ToString(Option.music_volume * 10000);
 
             this.Loaded += (s, e) => this.Focus();                                                               //确保焦点汇聚到page上
         }
@@ -29,13 +29,15 @@
         {
             if(Regex.IsMatch(Plot_font_size_Textbox.Text, @"^\d+$") && Regex.IsMatch(Plot_print_speed_Textbox.Text, @"^\d+$") && Regex.IsMatch(Music_volume_Textbox.Text, @"^\d+$"))
             {
-                Data.Option.Plot_font_size = ToInt32(Plot_font_size_Textbox.Text);
-                Data.Option.Plot_print_speed = ToInt32(Plot_print_speed_Textbox.Text);
-                Data.Option.Music_volume = ToDouble(Music_volume_Textbox.Text) / 10000.0;
-                Data.Global_music.Global_media_element.Volume = Data.Option.Music_volume;
+                Option.plot_font_size = ToInt32(Plot_font_size_Textbox.Text);
+                Option.plot_print_speed = ToInt32(Plot_print_speed_Textbox.Text);
+                Option.music_volume = ToDouble(Music_volume_Textbox.Text) / 10000.0;
+
+                //使得音量更改立即生效
+                Music_player.music_player.Volume = Option.music_volume;
 
                 //保存Options到文件
-                Data.Option_wrtie_out();
+                Option.Wrtie_out();
             }
         }
     }

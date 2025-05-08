@@ -15,7 +15,7 @@
         private void start_game()
         {
             //开始游戏会有两种情况，一是什么都存档都没有，则进入New_start界面创建新的存档；二是有存档，那么Options文件中必然有save_choose值，则进入Ribillion界面。
-            if (Data.Option.Save_choose == 0)
+            if (Option.save_choose == 0)
             {
                 Data.Main_window.Page_frame.NavigationService.Navigate(new New_start());           //跳转到New_start界面
             }

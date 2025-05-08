@@ -18,12 +18,13 @@
         烟尘记游戏 game;
 
 
-        public Game()
+        public Game(烟尘记游戏 game)
         {
             InitializeComponent();
+
             this.Loaded += (s, e) => this.Focus();                                                               //确保焦点汇聚到page上
 
-            game = new(Data.Saves[Data.Option.Save_choose - 1]);                                                   //初始化游戏逻辑对象（利用所选择的存档内容）
+            this.game = game;                                                                                    //接受从Rebillion页面传过来的game对象）
 
             now_mode = mode.wait_plot_print;                                                                     //标准初始化前台游戏参数（与存档内容无关）
         }
@@ -32,7 +33,6 @@
         {
             game.Save_game();                                                                                //保存游戏进度
             game = null;                                                                                     //将game对象放入垃圾处理器，等待.net平台回收
-            Data.Save_write_out();                                                                           //保存Saves到文件
             Data.Main_window.Page_frame.NavigationService.Navigate(new Trace(false, false));                  //跳转到Trace页面
         }
 
@@ -43,18 +43,18 @@
         {
             //逐字输出剧情
 
-            for (int i = 1; i <= Data.Nodes[game.Jump - 1].Plot.Length; i++)                                       //i指要输出的这一段剧情中的第几个字，而 i-1 指这个字对应的plot的序号
+            for (int i = 0; i < game.Nodes[game.Jump - 1].Plot.Length; i++)
             {
 
 
                 // 使用 Dispatcher 在 UI 线程上更新 PlotText
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    PlotText.Text += Data.Nodes[game.Jump - 1].Plot[i - 1];
+                    PlotText.Text += game.Nodes[game.Jump - 1].Plot[i];
                     Plot_scrollviewer.ScrollToBottom();
                 });
 
-                Thread.Sleep(Data.Option.Plot_print_speed);                        //这里是为了实验方便，成品后会去掉注释
+                Thread.Sleep(Option.plot_print_speed);                        //这里是为了实验方便，成品后会去掉注释
 
             }
 
@@ -67,77 +67,80 @@
 
         private void Choice_print()
         {
-            if (Data.Nodes[game.Jump - 1].Choices == null)             //如果没有选项，说明是结局，立即触发结局事件
+            if (game.Nodes[game.Jump - 1].Choices == null)             //如果没有选项，说明是结局，立即触发结局事件
             {
                 finish_view();
             }
             else                                                       //如果有选项，则输出选项
             {
 
-                //输出选项到屏幕
-                Choices_grid.Visibility = Visibility.Visible;                     //把dockpannal改成可见的（默认是隐藏的）
-
-
-                //统计需要输出几个选项
-                int choices_count = 0;
-                foreach (Data.Choice temp_choice in Data.Nodes[game.Jump - 1].Choices)
-                {
-                    if (temp_choice.Check(game.Record))
-                        choices_count++;
-                }
-
-                //计算 左侧留空，按钮间留空，右侧留空 的相对大小
-                double Grid_unit_width = 0.3 / (choices_count - 1 + 3);
-                double leftRightSpacingRatio = 3 * Grid_unit_width;
-                double betweenButtonSpacingRatio = Grid_unit_width;
-                double rightRightSpacingRatio = 3 * Grid_unit_width;
-
                 // 清空之前的列定义
                 Choices_grid.ColumnDefinitions.Clear();
 
-                //创建左侧留空
-                Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(leftRightSpacingRatio, GridUnitType.Star) });
 
-                //创建按钮,输出选项
-                int Button_count = 0;     //控制按扭之间的空白所需的计数器(此处foreach循环不能改为for循环，因为不是每个被遍历的choice都会被输出)
-                foreach (Data.Choice temp_choice in Data.Nodes[game.Jump - 1].Choices)
+                //筛选出能输出的选项(不能输出的直接删掉),在这之后game.Nodes[game.Jump - 1].Choices中只剩下能输出的选项
+                for (int i =0; i< game.Nodes[game.Jump - 1].Choices.Count;i++)
                 {
-                    //计数器自增(自增后的值代表第x个按钮)
-                    Button_count++;
+                    if (!game.Nodes[game.Jump - 1].Choices[i].Check(game.Record))
+                    {
+                        game.Nodes[game.Jump - 1].Choices.RemoveAt(i);
+                        //由于删除了一个元素，后面的元素会向前移动，所以i要减一
+                        i--;
+                    }
+                }
+
+
+                //设置按钮左右留白的占比，按钮以及按钮间留空的占比(按钮:留空=6:4)
+                double space_rate = 0.4;
+                double button_space_rate = 1-space_rate;
+
+                //计算 按钮的相对大小
+                double button_space_ratio = button_space_rate / game.Nodes[game.Jump - 1].Choices.Count;
+
+                //计算 左右侧留空，按钮间留空 的相对大小 (左右侧留空:按钮间留空=2:1)
+                double space_unit_width = space_rate / (game.Nodes[game.Jump - 1].Choices.Count - 1 + 4);
+                double left_right_space_ratio = 2 * space_unit_width;
+                double between_buttons_space_ratio = space_unit_width;
+
+
+                //创建左侧留空
+                Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(left_right_space_ratio, GridUnitType.Star) });
+
+                for(int i=0;i< game.Nodes[game.Jump - 1].Choices.Count;i++)
+                {
+                    //注意，i+1 是按钮的序数，比如i=0时代表第一个按钮
 
                     //创建按钮列
-                    Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7 / choices_count, GridUnitType.Star) });
-
+                    Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(button_space_ratio, GridUnitType.Star) });
+                    
                     //创建按钮
                     Button choicebutton = new()
                     {
-                        Name = "Choice" + Convert.ToString(Data.Nodes[game.Jump - 1].Choices.IndexOf(temp_choice) + 1),  //由于button的name属性必须以字母开头，所以不得不在前面加上Choice,后面处理时会去掉
-                        Content = temp_choice.Content,
+                        Name = "Choice" + Convert.ToString(i + 1),  //由于button的name属性必须以字母开头，所以不得不在前面加上Choice,后面处理时会去掉
+                        Content = game.Nodes[game.Jump - 1].Choices[i].Content,
                         Visibility = Visibility.Visible
                     };
-                    Grid.SetColumn(choicebutton, Button_count * 2 - 1);              //将按钮填入为其创建的列中
+
+                    Grid.SetColumn(choicebutton, (i+1)*2-1);                         //将按钮填入为其创建的列中，注意(i+1)*2-1是因为i和列数从0开始，而button的序数从1开始
                     choicebutton.Click += new RoutedEventHandler(choose_click);      //给每一个choicebutton赋予一样的响应点击事件
                     Choices_grid.Children.Add(choicebutton);                         //将每一个choicebutton添加到choicesdock中
 
                     //创建按钮间留空(如果不是最后一个按钮的话)
-                    if (Button_count < choices_count)
+                    if ((i+1) < game.Nodes[game.Jump - 1].Choices.Count)
                     {
-                        Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(betweenButtonSpacingRatio, GridUnitType.Star) });
+                        Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(between_buttons_space_ratio, GridUnitType.Star) });
                     }
                 }
 
                 //创建右侧留空
-                Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(rightRightSpacingRatio, GridUnitType.Star) });
+                Choices_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(left_right_space_ratio, GridUnitType.Star) });
+
+                //输出选项到屏幕
+                Choices_grid.Visibility = Visibility.Visible;                     //把dockpannal改成可见的（默认是隐藏的）
 
                 // 强制更新布局
                 Choices_grid.UpdateLayout();
             }
-
-
-            /*           if (game != null)                                //检查game是不是null，如果是，说明游戏已经到了结局，甚至都已经不在Game页面了。
-                       {           
-                       }
-            */
         }
 
 

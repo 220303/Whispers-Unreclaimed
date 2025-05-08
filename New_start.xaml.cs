@@ -15,17 +15,17 @@
         {
             if (!(string.IsNullOrEmpty(New_save_name.Text)) && !(string.IsNullOrWhiteSpace(New_save_name.Text)))
             {
-                Data.Saves.Add
+                Save.saves.Add
                 (
-                    new Data.Save()
+                    new Save.save()
                     {
                         Name = New_save_name.Text,
                         Jump = 1,
                         Record = new List<string>() { "0-0" }
                     }
                 );
-                Data.Option.Save_choose = (Data.Saves.Count);
-                //Data.Options_wrtie_out();
+                Option.save_choose = (Save.saves.Count);
+                Option.Wrtie_out();
                 Data.Main_window.Page_frame.NavigationService.Navigate(new Rebillion_qoutes());           //跳转到Rebillion界面
             }
         }

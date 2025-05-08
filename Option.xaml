@@ -13,62 +13,80 @@
     Tag="all"
     mc:Ignorable="d">
     <Grid>
-        <TextBox
-            Name="Plot_font_size_Textbox"
-            Width="242"
-            Height="24"
-            Margin="0,88,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            TextWrapping="Wrap" />
-        <TextBox
-            Name="Plot_print_speed_Textbox"
-            Width="242"
-            Height="24"
-            Margin="0,169,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            TextWrapping="Wrap" />
-        <TextBox
-            Name="Music_volume_Textbox"
-            Width="242"
-            Height="24"
-            Margin="0,250,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            TextWrapping="Wrap" />
-        <Button
-            Name="Save_options"
-            Width="120"
-            Height="24"
-            Margin="0,346,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            Click="Save_options_Click"
-            Content="保存设置" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="20*" />
+            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="1.5*" />
+        </Grid.RowDefinitions>
 
+        <Grid Grid.Row="1">
 
-        <Label
-            Width="103"
-            Height="24"
-            Margin="162,88,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Content="字体大小" />
-        <Label
-            Width="103"
-            Height="24"
-            Margin="162,169,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Content="文字输出速度" />
-        <Label
-            Width="103"
-            Height="24"
-            Margin="162,250,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Content="音乐声音" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="8*" />
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="10*" />
+                <ColumnDefinition Width="8*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="1.5*" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="1.5*" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="1.5*" />
+                <RowDefinition Height="3*" />
+            </Grid.RowDefinitions>
+
+            <TextBox
+                Name="Plot_font_size_Textbox"
+                Grid.Row="1"
+                Grid.Column="3"
+                TextWrapping="Wrap" />
+            <TextBox
+                Name="Plot_print_speed_Textbox"
+                Grid.Row="3"
+                Grid.Column="3"
+                TextWrapping="Wrap" />
+            <TextBox
+                Name="Music_volume_Textbox"
+                Grid.Row="5"
+                Grid.Column="3"
+                TextWrapping="Wrap" />
+
+            <Label
+                Grid.Row="1"
+                Grid.Column="1"
+                Content="字体大小" />
+            <Label
+                Grid.Row="3"
+                Grid.Column="1"
+                Content="文字输出速度" />
+            <Label
+                Grid.Row="5"
+                Grid.Column="1"
+                Content="音乐声音" />
+
+        </Grid>
+
+        <Grid Grid.Row="3">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10*" />
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="10*" />
+            </Grid.ColumnDefinitions>
+
+            <Button
+                Name="Save_options"
+                Grid.Column="1"
+                Click="Save_options_Click"
+                Content="保存设置" />
+        </Grid>
+
 
     </Grid>
 </Page>

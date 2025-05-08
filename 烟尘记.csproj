@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <BaseOutputPath>T:\ELCO\Computer Science\Software Engineering\[烟尘记]\烟尘记 [ Code ]\————烟尘记————\bin</BaseOutputPath>
+    <BaseOutputPath>T:\ELCO\Computer Science\Software Engineering\烟尘记\烟尘记 [ Code ]\烟尘记\bin</BaseOutputPath>
   </PropertyGroup>
 
 </Project>

@@ -26,7 +26,6 @@
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             game.Save_game();                                                               //保存游戏进度
-            Data.Save_write_out();                                                          //保存Saves到文件
         }
 
         private void Quit_Click(object sender, RoutedEventArgs e)

@@ -11,10 +11,10 @@
 
             this.operation = operation;
             this.back = back;
-            Saves_ListBox.ItemsSource = Data.Saves;
+            Saves_ListBox.ItemsSource = Save.saves;
 
-            if(Data.Option.Save_choose != 0)                                                             //刚安装好游戏时默认是0，此时不高亮SelectItem(显蓝)
-                Saves_ListBox.SelectedItem = Data.Saves[Data.Option.Save_choose - 1];                    //通过高亮SelectItem(显蓝)显示选中的存档
+            if(Option.save_choose != 0)                                                             //刚安装好游戏时默认是0，此时不高亮SelectItem(显蓝)
+                Saves_ListBox.SelectedItem = Save.saves[Option.save_choose - 1];                    //通过高亮SelectItem(显蓝)显示选中的存档
 
             if (operation ==false)
             {
@@ -58,9 +58,9 @@
             {
                 if (Saves_ListBox.SelectedItem != null)
                 {
-                    Data.Save selected = (Data.Save)Saves_ListBox.SelectedItem;
-                    Data.Option.Save_choose = Data.Saves.IndexOf(selected)+1;
-                    Data.Option_wrtie_out();
+                    Save.save selected = (Save.save)Saves_ListBox.SelectedItem;
+                    Option.save_choose = Save.saves.IndexOf(selected)+1;
+                    Option.Wrtie_out();
                 }
             }
         }
@@ -73,14 +73,14 @@
             {
                 if (Saves_ListBox.SelectedItem != null)
                 {
-                    Data.Save selected = (Data.Save)Saves_ListBox.SelectedItem;
-                    if (Data.Option.Save_choose == Data.Saves.IndexOf(selected))
+                    Save.save selected = (Save.save)Saves_ListBox.SelectedItem;
+                    if (Option.save_choose == Save.saves.IndexOf(selected))
                     {
-                        Data.Option.Save_choose =0;
+                        Option.save_choose =0;
                         //Data.Options_wrtie_out();
                     }
-                    Data.Saves.Remove(selected);
-                    File.Delete(Data.Saves_directory_path + selected.Name + ".txt");
+                    Save.saves.Remove(selected);
+                    File.Delete(Save.Saves_directory_path + selected.Name + ".txt");
                 }
             }
         }

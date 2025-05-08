@@ -10,35 +10,46 @@
     d:DesignWidth="800"
     Focusable="True"
     KeyDown="Page_KeyDown"
-    mc:Ignorable="d"
-    Tag="game">
+    Tag="game"
+    mc:Ignorable="d">
 
     <Grid>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.8*" />
+            <ColumnDefinition Width="0.8*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="0.8*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+
+
         <Button
             Name="Save"
-            Width="139"
-            Height="38"
-            Margin="165,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
+            Grid.Row="3"
+            Grid.Column="1"
             Click="Save_Click"
             Content="保存" />
         <Button
             Name="Quit"
-            Width="139"
-            Height="38"
-            Margin="486,154,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
+            Grid.Row="5"
+            Grid.Column="3"
             Click="Quit_Click"
             Content="退出" />
         <Button
             Name="Quit_to_Start"
-            Width="139"
-            Height="38"
-            Margin="486,270,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
+            Grid.Row="1"
+            Grid.Column="3"
             Click="Quit_to_Start_Click"
             Content="退出到开始界面" />
 
