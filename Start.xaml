@@ -11,9 +11,47 @@
     Focusable="True"
     KeyDown="Page_KeyDown"
     MouseDown="Page_MouseDown"
-    mc:Ignorable="d"
-    Tag="program">
-    <Page.Background>
-        <SolidColorBrush Color="DodgerBlue"/>
-    </Page.Background>
+    Tag="program"
+    mc:Ignorable="d">
+    <Grid>
+
+        <!--  背景图片层  -->
+        <Canvas x:Name="BackgroundCanvas" ClipToBounds="True">
+            <Image
+                x:Name="Image1"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="./Filesystem/Resource/Start/Start1.png">
+                <Image.RenderTransform>
+                    <TranslateTransform x:Name="transform1" />
+                </Image.RenderTransform>
+                <Image.Effect>
+                    <local:WaterRippleEffect
+                        x:Name="RippleEffect_1"
+                        Amplitude="0.4"
+                        Center="0.5,0.5"
+                        Frequency="80"
+                        Speed="8"
+                        Time="0" />
+                </Image.Effect>
+            </Image>
+            <Image
+                x:Name="Image2"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="./Filesystem/Resource/Start/Start1.png">
+                <Image.RenderTransform>
+                    <TranslateTransform x:Name="transform2" />
+                </Image.RenderTransform>
+                <Image.Effect>
+                    <local:WaterRippleEffect
+                        x:Name="RippleEffect_2"
+                        Amplitude="0.4"
+                        Center="0.5,0.5"
+                        Frequency="80"
+                        Speed="8"
+                        Time="0" />
+                </Image.Effect>
+            </Image>
+        </Canvas>
+
+    </Grid>
 </Page>

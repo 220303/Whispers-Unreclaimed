@@ -1,12 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-    <BaseOutputPath>T:\ELCO\Computer Science\Software Engineering\烟尘记\烟尘记 [ Code ]\烟尘记\bin</BaseOutputPath>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<BaseOutputPath>T:\ELCO\Computer Science\Software Engineering\烟尘记\烟尘记 [ Code ]\烟尘记\bin</BaseOutputPath>
+	</PropertyGroup>
 
+
+	<ItemGroup>
+		<!-- 匹配 Filesystem 文件夹下的所有文件（包括子文件夹）, water_ripple.ps 以及.hlsl除外 -->
+		<Content Include="Filesystem\**\*.*" Exclude="Filesystem\Resource\Start\water_ripple.*">
+			<!-- 统一属性 -->
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<!-- 指定输出路径（在 net8.0-windows 中的 Filesystem 文件夹内） -->
+			<TargetPath>.\Filesystem\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
+		</Content>
+		<!-- 单独作为资源的 water_ripple.ps -->
+		<Resource Include="Filesystem\Resource\Start\water_ripple.ps"/>
+	</ItemGroup>
+
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+	  <Exec Command="fxc /T ps_2_0 /E main /Fo &quot;$(ProjectDir)Filesystem\Resource\Start\water_ripple.ps&quot; &quot;$(ProjectDir)Filesystem\Resource\Start\water_ripple.hlsl&quot;" />
+	</Target>
 </Project>

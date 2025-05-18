@@ -11,7 +11,7 @@
     Tag="game"
     mc:Ignorable="d">
     <Page.Background>
-        <SolidColorBrush Color="Black" />
+        <SolidColorBrush Color="Black"/>
     </Page.Background>
     <Grid>
         <Viewbox Stretch="Uniform">
@@ -34,5 +34,6 @@
                     Foreground="White" />
             </Grid>
         </Viewbox>
+
     </Grid>
 </Page>

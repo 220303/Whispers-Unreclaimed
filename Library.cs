@@ -3,7 +3,7 @@
     public static class Data
     {
         //游戏所有文件的根目录
-        public static string Filesystem_directory_path = "../Filesystem/";
+        public static string Filesystem_directory_path = "./Filesystem/";
 
         //存放背景图片的位置
         public static string Image_directory_path = Filesystem_directory_path + "Resource/image/";
@@ -181,6 +181,7 @@
         public static int plot_font_size { get; set; }
         public static int plot_print_speed { get; set; }
         public static double music_volume { get; set; }
+        public static int start_picture_speed { get; set; }
 
 
         //Option的方法
@@ -188,21 +189,25 @@
         {
             string savecontent = File.ReadAllText(Options_file_path);                               //从设置文件中读取所有内容
 
-            string[] content_array = null;
-            content_array = savecontent.Split('\n');
+            string[] content_array = savecontent.Split('\n');
+
             save_choose = ToInt16(content_array[0]);
             plot_font_size = ToInt16(content_array[1]);
             plot_print_speed = ToInt16(content_array[2]);
             music_volume = ToDouble(content_array[3]);
+            start_picture_speed = ToInt16(content_array[4]);
         }
 
         public static void Wrtie_out()
         {
-            string[] content_array = new string[4];
-            content_array[0] = Convert.ToString(save_choose);
-            content_array[1] = Convert.ToString(plot_font_size);
-            content_array[2] = Convert.ToString(plot_print_speed);
-            content_array[3] = Convert.ToString(music_volume);
+            string[] content_array =
+            [
+                Convert.ToString(save_choose),
+                Convert.ToString(plot_font_size),
+                Convert.ToString(plot_print_speed),
+                Convert.ToString(music_volume),
+                Convert.ToString(start_picture_speed),
+            ];
 
             string new_options_content = string.Join('\n', content_array);                        //将数据重新组合成一个字符串
 

@@ -1,4 +1,6 @@
-﻿namespace 烟尘记
+﻿using System.Windows.Media.Animation;
+
+namespace 烟尘记
 {
     /// <summary>
     /// Rebillion_qoutes.xaml 的交互逻辑
@@ -8,9 +10,11 @@
         public Rebillion_qoutes()
         {
             InitializeComponent();
-
             Load();
         }
+        
+
+
 
         private async void Load()
         {
@@ -23,11 +27,11 @@
             //初始化游戏逻辑对象（利用所选择的存档内容)
             Task Task_load = Task.Run(() => game = new(Save.saves[Option.save_choose - 1]));
 
-            Task Task_wait = Task.Run(() => Thread.Sleep(3000));       //等待四秒，(如果最终剧情不够加载四秒，就凑够四秒)
+            Task Task_wait = Task.Run(() => Thread.Sleep(4500));       //等待六秒(由于入场动画原因，用户看到语录的事件只有不到四秒)(如果最终剧情不够加载六秒，就凑够六秒)
 
             await Task_load;
 
-            await Task_wait;    //对应于上面的等待四秒
+            await Task_wait;    //对应于上面的等待六秒
 
             Data.Main_window.Page_frame.NavigationService.Navigate(new Game(game));           //跳转到Game界面
         }

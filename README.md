@@ -27,25 +27,73 @@
 
 作为游戏的主窗口，也是唯一的窗口，所有的游戏界面都作为页面在其上切换，采用`Frame`框架来承载页面，并且隐藏导航栏。它的构造函数包括初始化`Frame`和加载`Start`页面，它的析构函数种包含写入存档和设置文件。
 
+##### 页面切换动画：
+
+`MainWindow.xaml`：添加蒙版层，用于展示页面切换动画以及屏蔽动画发生时的输入。
+
+`MainWindow.xaml.cs`：监听并处理`Page_frame.Navigating`，`Page_frame.Navigated` 两个导航事件，分别代表页面切出和切入。
+
+* `MainFrame_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)`：页面切出动画，蒙版由透明转不透明 (全黑)
+* `MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)`：页面切入动画，蒙版由不透明 (全黑)转透明
+
 #### `Start`页面：
 
 用户一进入游戏，就会处在`Start`页面上，`Start`页面会显示封面，可以接受输入并跳转到`Rebillion qoutes`页面，`New start`页面，`Trace`页面，`Option`页面。
 
-进入游戏：如果什么都存档都没有，则进入`New_start`页面创建新的存档；如果有存档，则进入`Rebillion qoutes`页面加载存档。
+##### 交互逻辑：
 
-鼠标：点击屏幕任意区域进入游戏。
-
-键盘：
-
-> 输入 `shift`+`;`进入`Option`页面。
+> 鼠标：点击屏幕任意区域进入游戏。
 >
-> 输入 `shift`+`a`进入`Trace`页面。
+> 键盘：
 >
-> 按其余任意键进入游戏。
+> * 输入 `shift`+`;`进入`Option`页面。
+>
+> * 输入 `shift`+`a`进入`Trace`页面。
+>
+> * 按其余任意键进入游戏。
+>
+> ***进入游戏***：如果什么都存档都没有，则进入`New_start`页面创建新的存档；如果有存档，则进入`Rebillion qoutes`页面加载存档
+
+* `Start()`：初始化背景、水波纹、聚焦键盘输入
+* `Start_game()`：执行 *进入游戏* 逻辑，会有两种情况，一是什么都存档都没有，则进入`New_start`界面创建新的存档；二是有存档，那么`Option`文件中必然有`save_choose`值，则进入`Ribillion_qoutes`页面。
+* `Page_KeyDown(object sender, KeyEventArgs e)`：根据用户输入进入`Trace`页面，`Option`页面，或调用`Start_game()`
+* `Page_MouseDown(object sender, MouseButtonEventArgs e)`：无条件调用`Start_game()`
+
+##### 背景：
+
+背景图是一张左右可以无缝衔接的`48:9`的图片 (豆包生成) ，通过两个并列的`Image`控件实现 (用户视角的) 横向循环播放。全部在`Start.xaml.cs`中实现。
+
+* `scaled_width`：图片的宽度(根据窗口高度动态改变)
+* `speed`：移动速度，单位: 像素/秒
+* `offset`：图片偏移量(表示移动到什么位置了)，始终是负值(因为是左移)
+* `last_update`：上次移动图片的时间，下次移动时要用
+* `InitializeAnimation()`：初始化动画
+* `Image_update_dimensions()`：处理改变窗口大小后图片的大小及位置变化
+* `UpdatePosition(object sender, EventArgs e)`：更新图片位置
+
+##### 水面波纹效果：
+
+在用户的鼠标周围呈现出水波纹，通过将`HLSL`编译为`GPU`可执行的`Shader`，并集成到`WPF`渲染管线来实现。
+
+* `water_ripple.hlsl`：定义了波纹的效果，采用指数衰减并设置相应参数。
+  + 在`烟尘记.csproj`中定义与生成事件，使用`Windows SDK`中的`fxc.exe`将其编译成`water_ripple.ps` 。
+  + 与`Filesystem`中的其他文件不同，`water_ripple.plsl`不包含在生成内容中，`water_ripple.ps`被设为内嵌设为资源。
+
+* `water_ripple_effect.cs`：与`water_ripple.ps`对接，提供`C#`代码访问`water_ripple.ps`的接口
+* `Start.xaml.cs`：实现有关波纹生成和跟踪鼠标移动的逻辑。
+  + `rippleTimer`：定时器
+  + `startTime`：波纹开始时间
+  + `Water_ripple_start()`：初始化水波动画
+  + `Watter_ripple_update_dimensions()`：窗口大小改变时，改变水波shader的宽高比
+
+* `Start.xaml`：给两个`Image`附上`Effect`来展现水波纹以及参数设定。
+  + `Amplitude`：振幅
+  + `Frequency`：频率
+  + `Speed`：速度
 
 #### `New start`页面:
 
-返回`Start`页面。
+创建新的存档。用户可以输入新存档名字，然后选择创建新存档。也可以选择返回`Start`页面。
 
 新建存档，设置存档名字然后进入存档。
 
@@ -157,8 +205,8 @@
 
 `Main_window`：为`MainWindow`生成的一个全局对象，使得在其他`Page`和类中也能访问到`MainWindow`中的内容：
 
-* 通过`Data.MainWindow.Page_frame.NavigationService.GoBack();`来返回上一个页面。
-* 通过`Data.Main_window.Page_frame.NavigationService.Navigate(new Options());`来导航到新页面。
+* 通过`Data.MainWindow.Page_frame.NavigationService.GoBack()`来返回上一个页面。
+* 通过`Data.Main_window.Page_frame.NavigationService.Navigate(Page newpage)`来导航到新页面。
 * 通过`Data.Main_window.global_media_element`访问`MainWindow`中的音乐播放器。
 * 通过`Data.Main_window.Page_frame.Navigated += Change_music`监听`Frame`导航来更改音乐。
 * 通过`Data.Main_window.Close();`调用关闭代码。
@@ -227,6 +275,26 @@
   
 
 ## 历史回顾：
+
+*** 2025年5月18日21：01***
+
+到现在我又完成了一个目标，成功写出了全局页面切换动画，也就是说所有页面之间的切换已经搞定了！我和AI讨论了好久，也采用过他们的好几版不同的方案实验修改了很久，但都因为反复尝试还是无法修改的致命缺陷被我一票否决。好在我在这一过程中了解了相关内容，最终直接自己原创了一版出来，完美符合要求！
+
+文档见`MainWindows`的`页面切换动画`部分。
+
+*** 2025年5月18日14：54***
+
+今天是个值得纪念的日子！
+
+截止到现在，我彻底完成了`Start`页面的美工部分，包括背景和水波纹。
+
+背景：我大概用了10小时左右用豆包制作背景图，背景图要求长宽比为`48:9`并且左右能无缝衔接。由于图片长宽比过大 ，豆包无法编辑，好在能生成，所以我只能反复开启新对话生成新图片，其中最难的就是左右无缝衔接，在百张以上的图片只有三张还算勉强过关，我选择了左右衔接最好的那一张 (诚然它的画面和颜色不是最好的) 。
+
+水波纹：我一开始采用了`canvas`控件+`WPF`动画的方式动态生成会扩散和消失的圆圈来模仿水波纹，最终确实实现了该效果，但是跟我想要的水面波纹效果一点都不像，所以我果断选择重新设计。我选择通过`Pixel Shader`像素着色器 (2.0版本)来动态实现水面波纹效果，我编写`water_ripple.hlsl`并使用`Windows SDK`中的`fxc.exe`将其编译成`water_ripple.ps`，之后使用`water_ripple_effect.cs`与之对接，然后在`Start.xaml`和`Start.xaml.cs`中使用。期间经历了多次发现`Bug`和修复`Bug`，最终我胜利完成目标！
+
+文档见`Start页面`的`背景`部分和`水面波纹效果`部分。
+
+*****
 
 ***2025年5月8日13：24***
 

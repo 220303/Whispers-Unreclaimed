@@ -1,16 +1,49 @@
-﻿<Window x:Class="烟尘记.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:烟尘记"
-        mc:Ignorable="d"
-        
-        Title="MainWindow" Height="540" Width="960">
+﻿<Window
+    x:Class="烟尘记.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:烟尘记"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="960"
+    Height="540"
+    mc:Ignorable="d">
     <Grid>
-        <Frame x:Name="Page_frame" NavigationUIVisibility="Hidden">
-            <!--这里的属性NavigationUIVisibility是用于设置是否隐藏上面的导航栏，如果没有这个，用导航方法跳转到另一个界面之后上面会出现导航条，类似于IE浏览器的前进和后退样式-->
-        </Frame>
-        <MediaElement x:Name="global_media_element" LoadedBehavior="Manual"/>
+
+        <!--  页面框架层  -->
+        <!--  这里的属性NavigationUIVisibility是用于设置是否隐藏上面的导航栏，如果没有这个，用导航方法跳转到另一个界面之后上面会出现导航条，类似于IE浏览器的前进和后退样式  -->
+        <Frame x:Name="Page_frame" NavigationUIVisibility="Hidden" />
+
+
+        <!--  全局音乐播放器  -->
+        <MediaElement x:Name="global_media_element" LoadedBehavior="Manual" />
+
+        <!--  蒙版层  -->
+        <Rectangle
+            x:Name="BlackMask"
+            Panel.ZIndex="999"
+            Fill="Black"
+            IsHitTestVisible="True"
+            Opacity="0"
+            Visibility="Collapsed">
+            <Rectangle.Resources>
+                <!--  渐变动画资源  -->
+                <Storyboard x:Key="Page_out">
+                    <DoubleAnimation
+                        Storyboard.TargetProperty="Opacity"
+                        From="0"
+                        To="1"
+                        Duration="0:0:0.8" />
+                </Storyboard>
+                <Storyboard x:Key="Page_in">
+                    <DoubleAnimation
+                        Storyboard.TargetProperty="Opacity"
+                        From="1"
+                        To="0"
+                        Duration="0:0:0.8" />
+                </Storyboard>
+            </Rectangle.Resources>
+        </Rectangle>
     </Grid>
 </Window>
