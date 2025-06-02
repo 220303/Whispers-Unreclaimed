@@ -8,6 +8,7 @@
     Title="Start"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    FocusManager.IsFocusScope="True"
     Focusable="True"
     KeyDown="Page_KeyDown"
     MouseDown="Page_MouseDown"

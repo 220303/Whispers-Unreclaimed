@@ -14,6 +14,13 @@
         <SolidColorBrush Color="Black"/>
     </Page.Background>
     <Grid>
+        
+        <!--  自定义控件用于绘制边框  -->
+        <local:MagicCornerBorder_Rebillion_qoutes
+            x:Name="Border_drawer"
+            Background="Transparent"
+            IsHitTestVisible="False" />
+        
         <Viewbox Stretch="Uniform">
             <Grid Width="1920" Height="1080">
                 <TextBlock

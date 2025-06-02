@@ -1,4 +1,5 @@
-﻿using System.Windows.Media.Animation;
+﻿using System.Windows.Documents;
+using System.Windows.Media.Animation;
 
 namespace 烟尘记
 {
@@ -11,23 +12,7 @@ namespace 烟尘记
         {
             InitializeComponent();
 
-
-            //初始化全局Main_window对象
-            Data.Main_window = this;
-
-            //必须等待页面初始化完成后才能初始化音乐播放器
-            Application.Current.Dispatcher.InvokeAsync(() =>
-            {
-                //初始化全局音乐播放器
-                Music_player.Start("program");
-            }, DispatcherPriority.Background);
-
-
-
-            //——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
-
-
+            #region 数据加载
 
             //加载存档到Data.Saves(List)中
             Save.Read_in();
@@ -38,86 +23,46 @@ namespace 烟尘记
             //加载 Rebillion Qoutes文件到 Rebillion_qoutes（string[]）中 
             Rebillion_qoute.Read_in();
 
-            //在中Page_frame中用Start作为初始页面
-            Page_frame.Content = new Frame() { Content = new Start() };
+            #endregion
 
-            // 监听导航事件
-            Page_frame.Navigating += MainFrame_Navigating;
-            Page_frame.Navigated += MainFrame_Navigated;
+            #region UI、交互相关初始化
 
-        }
+            //初始化全局Main_window对象
+            Data.Main_window = this;
+
+            //在中page_frame中用Start作为初始页面
+            page_frame.Content = new Frame() { Content = new Start() };
+
+            //初始化导航类
+            Page_frame.Navigation_animation_Initialize(page_frame, black_mask);
 
 
-
-
-
-        // 页面切出事件（导航开始前）
-        private void MainFrame_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)
-        {
-
-            BlackMask.Visibility = Visibility.Visible;
-
-            // 取消默认导航（先执行动画）
-            e.Cancel = true;
-
-            //避免重复触发事件
-            Page_frame.Navigating -= MainFrame_Navigating;
-
-            // 获取动画资源
-            var storyboard = ((Storyboard)BlackMask.Resources["Page_out"]).Clone();
-
-            // 动画完成时跳转
-            EventHandler handler = null;
-            handler = (s, args) =>
+            //必须等待页面初始化完成后才能初始化音乐播放器
+            Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                // 防止事件累积
-                storyboard.Completed -= handler;
+                //初始化全局音乐播放器
+                Music_player.Start("program");
+            }, DispatcherPriority.Background);
 
-                // 执行实际导航
-                Page_frame.Navigate(e.Content);
+            #endregion
 
-                //恢复事件监听
-                Page_frame.Navigating += MainFrame_Navigating;
-            };
-
-            //为克隆体添加事件监听
-            storyboard.Completed += handler;
-            // 启动动画
-            storyboard.Begin(BlackMask);
         }
 
-
-
-        // 页面切入事件（导航完成后）
-        private void MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-
-            //避免重复触发事件
-            Page_frame.Navigated -= MainFrame_Navigated;
-
-            // 获取动画资源
-            var storyboard = ((Storyboard)BlackMask.Resources["Page_in"]).Clone();
-
-            // 动画完成时跳转
-            EventHandler handler = null;
-            handler = (s, args) =>
+            if (e.Key == Key.F12)                                                                    //按F12键进入或退出全屏
             {
-                // 防止事件累积
-                storyboard.Completed -= handler;
-
-                // 隐藏蒙版
-                BlackMask.Visibility = Visibility.Collapsed;
-
-                //恢复事件监听
-                Page_frame.Navigated += MainFrame_Navigated;
-            };
-
-            //为克隆体添加事件监听
-            storyboard.Completed += handler;
-
-            // 启动动画
-            storyboard.Begin(BlackMask);
+                if(this.WindowStyle == WindowStyle.SingleBorderWindow)
+                {
+                    Data.Main_window.WindowState = WindowState.Maximized;
+                    Data.Main_window.WindowStyle = WindowStyle.None;
+                }
+                else if(this.WindowStyle == WindowStyle.None)
+                {
+                    Data.Main_window.WindowState = WindowState.Normal;
+                    Data.Main_window.WindowStyle = WindowStyle.SingleBorderWindow;
+                }
+            }
         }
-
     }
 }

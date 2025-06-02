@@ -8,12 +8,20 @@
     Title="MainWindow"
     Width="960"
     Height="540"
+    MinWidth="350"
+    MinHeight="350"
+    AllowsTransparency="False"
+    KeyDown="Window_KeyDown"
+    WindowState="Maximized"
+    WindowStyle="None"
     mc:Ignorable="d">
+    <!--  WindowStyle="None"  -->
+
     <Grid>
 
         <!--  页面框架层  -->
         <!--  这里的属性NavigationUIVisibility是用于设置是否隐藏上面的导航栏，如果没有这个，用导航方法跳转到另一个界面之后上面会出现导航条，类似于IE浏览器的前进和后退样式  -->
-        <Frame x:Name="Page_frame" NavigationUIVisibility="Hidden" />
+        <Frame x:Name="page_frame" NavigationUIVisibility="Hidden" />
 
 
         <!--  全局音乐播放器  -->
@@ -21,29 +29,12 @@
 
         <!--  蒙版层  -->
         <Rectangle
-            x:Name="BlackMask"
+            x:Name="black_mask"
             Panel.ZIndex="999"
             Fill="Black"
             IsHitTestVisible="True"
             Opacity="0"
-            Visibility="Collapsed">
-            <Rectangle.Resources>
-                <!--  渐变动画资源  -->
-                <Storyboard x:Key="Page_out">
-                    <DoubleAnimation
-                        Storyboard.TargetProperty="Opacity"
-                        From="0"
-                        To="1"
-                        Duration="0:0:0.8" />
-                </Storyboard>
-                <Storyboard x:Key="Page_in">
-                    <DoubleAnimation
-                        Storyboard.TargetProperty="Opacity"
-                        From="1"
-                        To="0"
-                        Duration="0:0:0.8" />
-                </Storyboard>
-            </Rectangle.Resources>
-        </Rectangle>
+            Visibility="Collapsed" />
     </Grid>
+
 </Window>

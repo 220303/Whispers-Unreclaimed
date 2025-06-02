@@ -12,7 +12,7 @@
 
 	<ItemGroup>
 		<!-- 匹配 Filesystem 文件夹下的所有文件（包括子文件夹）, water_ripple.ps 以及.hlsl除外 -->
-		<Content Include="Filesystem\**\*.*" Exclude="Filesystem\Resource\Start\water_ripple.*">
+		<Content Include="Filesystem\**\*.*">
 			<!-- 统一属性 -->
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<!-- 指定输出路径（在 net8.0-windows 中的 Filesystem 文件夹内） -->
@@ -20,7 +20,11 @@
 		</Content>
 		<!-- 单独作为资源的 water_ripple.ps -->
 		<Resource Include="Filesystem\Resource\Start\water_ripple.ps"/>
+		
+		<!-- 单独作为资源的 Font 下的内容-->
+		<Resource Include="Filesystem\Resource\Font\**\*.*" />
 	</ItemGroup>
+
 
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">

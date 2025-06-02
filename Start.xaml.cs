@@ -1,6 +1,4 @@
-﻿using System.Windows.Media.Animation;
-
-namespace 烟尘记
+﻿namespace 烟尘记
 {
     /// <summary>
     /// Start.xaml 的交互逻辑
@@ -13,7 +11,7 @@ namespace 烟尘记
 
 
             //从Option静态类中读取图片的移动速度
-            //this.speed = Option.start_picture_speed;
+            this.speed = Option.start_picture_speed;
             //设置窗口大小改变时的调用UpdateDimensions()
             SizeChanged += (s, e) => Image_update_dimensions();
             //设置加载页面后自动初始化并开始动画
@@ -31,7 +29,7 @@ namespace 烟尘记
 
 
 
-        //以下是水波纹部分
+        #region 水波纹部分
 
         //水波纹需要的定时器
         private DispatcherTimer rippleTimer = new DispatcherTimer();
@@ -99,17 +97,17 @@ namespace 烟尘记
             RippleEffect_2.AspectRatio = (float)(Image2.Width / Image2.Height);
         }
 
+        #endregion
 
 
 
-
-        //以下是背景部分
+        #region 背景部分
 
         //图片的宽度(根据窗口高度动态改变)
         private double scaled_width;
 
         //移动速度，单位: 像素/秒
-        private int speed = 20;
+        private int speed;
 
         //图片偏移量(表示移动到什么位置了),始终是负值(因为是左移)
         private double offset;
@@ -180,11 +178,11 @@ namespace 烟尘记
             transform1.X = Math.Round(offset, 0);
         }
 
+        #endregion
 
 
 
-
-        //以下是游戏交互逻辑处理函数
+        #region 游戏交互逻辑处理函数
 
 
         private void Start_game()
@@ -192,37 +190,69 @@ namespace 烟尘记
             //开始游戏会有两种情况，一是什么都存档都没有，则进入New_start界面创建新的存档；二是有存档，那么Option文件中必然有save_choose值，则进入Ribillion_qoutes页面。
             if (Option.save_choose == 0)
             {
-                Data.Main_window.Page_frame.NavigationService.Navigate(new New_start());           //跳转到New_start界面
+                Page_frame.Navigate(new New_start());                                           //跳转到New_start界面
             }
             else
             {
-                Data.Main_window.Page_frame.NavigationService.Navigate(new Rebillion_qoutes());           //跳转到Rebillion界面
+                Page_frame.Navigate(new Rebillion_qoutes());                                    //跳转到Rebillion界面
             }
         }
 
 
+
         private void Page_KeyDown(object sender, KeyEventArgs e)
         {
-
-            if ((e.KeyboardDevice.Modifiers == ModifierKeys.Shift) && (e.Key == Key.OemSemicolon))                      //输入 shift+; 进入Option界面
+            if (Option.tutorial_completed == 0)
             {
-                Data.Main_window.Page_frame.NavigationService.Navigate(new Options());           //跳转到Option界面            
+                Page_frame.Navigate(new Tutorial());                                           //跳转到Tutorial界面
             }
-            else if ((e.KeyboardDevice.Modifiers == ModifierKeys.Shift) && (e.Key == Key.A))                            //输入 shift+a 进入Trace 界面
+            else
             {
-                Data.Main_window.Page_frame.NavigationService.Navigate(new Trace(true, true));           //跳转到Trace界面               
-            }
-            else if ((e.Key != Key.LeftShift) && (e.Key != Key.RightShift))                                                //按其余任意键进入游戏
-            {
-                Start_game();
+                if (e.Key == Key.F12)
+                {
+                    //F12键在MainWindow里面处理，这里不处理
+                    return;
+                }
+                if ((e.KeyboardDevice.Modifiers == ModifierKeys.Shift) && (e.Key == Key.Oem2))                              //输入 shift+/ 进入Tutorial界面
+                {
+                    Option.tutorial_completed = 0;                                                                          //重置教程完成状态
+                    Page_frame.Navigate(new Tutorial());                                                                    //跳转到Tutorial界面            
+                }
+                if ((e.KeyboardDevice.Modifiers == ModifierKeys.Shift) && (e.Key == Key.OemSemicolon))                      //输入 shift+; 进入Option界面
+                {
+                    Page_frame.Navigate(new Options());                                                                     //跳转到Option界面            
+                }
+                else if ((e.KeyboardDevice.Modifiers == ModifierKeys.Shift) && (e.Key == Key.A))                            //输入 shift+a 进入Trace 界面
+                {
+                    Page_frame.Navigate(new Trace());                                                                       //跳转到Trace界面               
+                }
+                else if (e.Key == Key.Escape)                                                                  //按Esc键直接退出游戏
+                {
+                    //关闭整个程序
+                    Data.Main_window.Close();
+                }
+                else if ((e.Key != Key.LeftShift) && (e.Key != Key.RightShift))                                                //按其余任意键进入游戏
+                {
+                    Start_game();
+                }
             }
         }
 
 
         private void Page_MouseDown(object sender, MouseButtonEventArgs e)                             //点击屏幕任意区域进入游戏
         {
-            Start_game();
+
+            if (Option.tutorial_completed == 0)
+            {
+                Page_frame.Navigate(new Tutorial());                                           //跳转到Tutorial界面
+            }
+            else
+            {
+                Start_game();
+            }
         }
+
+        #endregion
 
     }
 }

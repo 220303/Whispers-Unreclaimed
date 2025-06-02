@@ -8,65 +8,281 @@
     Title="Game"
     d:DesignHeight="540"
     d:DesignWidth="960"
+    FocusManager.IsFocusScope="True"
     Focusable="True"
     KeyDown="Page_KeyDown"
     PreviewMouseLeftButtonDown="Page_PreviewMouseLeftButtonDown"
-    mc:Ignorable="d"
-    Tag="game">
-    <Grid
-        Name="Total_grid"
-        Focusable="True"
-        KeyDown="Page_KeyDown">
+    Tag="game"
+    mc:Ignorable="d">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="14*" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="54*" />
-            <ColumnDefinition Width="2*" />
-        </Grid.ColumnDefinitions>
+    <Page.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="3*" />
-            <RowDefinition Height="60*" />
-            <RowDefinition Height="3*" />
-        </Grid.RowDefinitions>
+        <!--  金色主题颜色资源-->
+        <Color x:Key="BorderColor">#D4AF37</Color>
+        <!-- 主金色 -->
+        <Color x:Key="GlowColor">#FFEC8B</Color>
+        <!-- 浅金色光晕 -->
+        <Color x:Key="TextColor">#FFF8DC</Color>
+        <!-- 米白色文本 -->
+        <Color x:Key="TextHoverColor">#FFD700</Color>
+        <!-- 亮金色 -->
+        <Color x:Key="TextShadowColor">#D4AF37</Color>
+        <!-- 主金色光晕 -->
+        <Color x:Key="PressedBorderColor">#B8860B</Color>
+        <!-- 深金色 -->
+        <Color x:Key="BackgroundColor">Black</Color>
+        <!-- 保持背景为黑色 -->
 
-        <Grid
-            Name="Right_grid"
-            Grid.Row="1"
-            Grid.Column="3">
+        <!--  金色主题画刷资源（名称不变）  -->
+        <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}" />
+        <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}" />
+        <SolidColorBrush x:Key="PressedBorderBrush" Color="{StaticResource PressedBorderColor}" />
+        <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
 
+
+
+        <!--  魔法按钮样式  -->
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <!--  背景层 - 增强光晕  -->
+                            <Border
+                                x:Name="BackgroundBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="2"
+                                CornerRadius="4">
+                                <Border.Effect>
+                                    <DropShadowEffect
+                                        x:Name="BorderGlow"
+                                        BlurRadius="0"
+                                        Opacity="0"
+                                        ShadowDepth="0"
+                                        Color="{StaticResource GlowColor}" />
+                                </Border.Effect>
+                            </Border>
+
+                            <!--  内容层  -->
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="4*" />
+                                    <ColumnDefinition Width="1*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="4*" />
+                                    <RowDefinition Height="1*" />
+                                </Grid.RowDefinitions>
+
+                                <Viewbox
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Stretch="Uniform">
+                                    <TextBlock
+                                        x:Name="ButtonText"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Effect="{x:Null}"
+                                        FontFamily="Palatino Linotype"
+                                        FontSize="18"
+                                        FontWeight="Bold"
+                                        Foreground="{StaticResource TextBrush}"
+                                        Text="{TemplateBinding Content}" />
+                                </Viewbox>
+
+                            </Grid>
+
+                            <!--  粒子效果层  -->
+                            <Canvas x:Name="ParticleCanvas" IsHitTestVisible="False" />
+
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <!--  鼠标悬停动画  -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="ButtonText"
+                                                Storyboard.TargetProperty="Foreground.Color"
+                                                To="{StaticResource TextHoverColor}"
+                                                Duration="0:0:0.5" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="BorderGlow"
+                                                Storyboard.TargetProperty="BlurRadius"
+                                                To="25"
+                                                Duration="0:0:0.5" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="BorderGlow"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="1.0"
+                                                Duration="0:0:0.5" />
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonText" Storyboard.TargetProperty="Effect">
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Null}" />
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:0.5">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <DropShadowEffect
+                                                            BlurRadius="12"
+                                                            Opacity="0.8"
+                                                            ShadowDepth="0"
+                                                            Color="{StaticResource TextShadowColor}" />
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetName="ButtonText"
+                                                Storyboard.TargetProperty="Foreground.Color"
+                                                To="{StaticResource TextColor}"
+                                                Duration="0:0:1" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="BorderGlow"
+                                                Storyboard.TargetProperty="BlurRadius"
+                                                To="0"
+                                                Duration="0:0:1" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="BorderGlow"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0"
+                                                Duration="0:0:1" />
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonText" Storyboard.TargetProperty="Effect">
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <DropShadowEffect
+                                                            BlurRadius="12"
+                                                            Opacity="0.8"
+                                                            ShadowDepth="0"
+                                                            Color="{StaticResource TextShadowColor}" />
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:1" Value="{x:Null}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+
+                            <!--  按下效果  -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="BackgroundBorder" Property="BorderBrush" Value="{StaticResource PressedBorderBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
+            <Setter Property="Padding" Value="15,8" />
+            <Setter Property="TextElement.Foreground" Value="{StaticResource TextBrush}" />
+        </Style>
+
+        <!--  Choices_grid的淡入和淡出  -->
+        <Storyboard x:Key="Choices_grid_fade_in">
+            <DoubleAnimation
+                FillBehavior="HoldEnd"
+                Storyboard.TargetProperty="Opacity"
+                From="0"
+                To="1"
+                Duration="0:0:1" />
+        </Storyboard>
+        <Storyboard x:Key="Choices_grid_fade_out">
+            <DoubleAnimation
+                FillBehavior="HoldEnd"
+                Storyboard.TargetProperty="Opacity"
+                From="1"
+                To="0"
+                Duration="0:0:1" />
+        </Storyboard>
+
+
+    </Page.Resources>
+    <!--  总Grid  -->
+    <Grid x:Name="Total_grid">
+
+        <!--  星空背景板  -->
+        <Canvas x:Name="Star_field" Background="Black" />
+
+        <!--  内容Grid  -->
+        <Grid x:Name="Content_grid">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="14*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="54*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="29*" />
-                <RowDefinition Height="2*" />
                 <RowDefinition Height="3*" />
-                <RowDefinition Height="2*" />
+                <RowDefinition Height="60*" />
+                <RowDefinition Height="3*" />
             </Grid.RowDefinitions>
 
-            <ScrollViewer
-                Name="Plot_scrollviewer"
-                Grid.Row="0"
-                VerticalScrollBarVisibility="Hidden">
+            <Grid
+                x:Name="Left_grid"
+                Grid.Row="1"
+                Grid.Column="1">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1.5*" />
+                    <RowDefinition Height="4.5*" />
+                    <RowDefinition Height="16*" />
+                </Grid.RowDefinitions>
+
                 <TextBlock
-                    x:Name="PlotText"
-                    FontSize="40"
-                    TextWrapping="Wrap" />
-            </ScrollViewer>
-            <Grid Name="Dock_grid" Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0*" />
-                    <ColumnDefinition Width="5*" />
-                    <ColumnDefinition Width="66*"/>
-                    <ColumnDefinition Width="0*" />
-                </Grid.ColumnDefinitions>
+                    x:Name="Save_name"
+                    Grid.Row="1"
+                    FontSize="18"
+                    Foreground="White"
+                    Text="" />
+            </Grid>
+
+            <Grid
+                x:Name="Right_grid"
+                Grid.Row="1"
+                Grid.Column="3">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="29*" />
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="2*" />
+                </Grid.RowDefinitions>
+
+                <ScrollViewer
+                    Name="Plot_scrollviewer"
+                    Grid.Row="0"
+                    VerticalScrollBarVisibility="Hidden">
+                    <TextBlock
+                        x:Name="PlotText"
+                        FontSize="{x:Static local:Option.plot_font_size}"
+                        Foreground="White"
+                        TextWrapping="Wrap" />
+                </ScrollViewer>
+
                 <Grid
                     x:Name="Choices_grid"
-                    Grid.Column="1"
-                    Visibility="Collapsed" Grid.ColumnSpan="2" />
+                    Grid.Row="2"
+                    Opacity="0"
+                    Visibility="Collapsed" />
+
             </Grid>
 
         </Grid>
 
     </Grid>
+
 </Page>

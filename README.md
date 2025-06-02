@@ -1,25 +1,174 @@
 # 烟尘记
 
+## Mist and Dust
+
+
+
+### 目录
+
+* #### 项目简介 [跳转](# 项目简介)
+
+* #### 游戏教程 [跳转](# 游戏教程)
+
+* #### 基本架构 [跳转](# 基本架构)
+
+* #### 开发设计 [跳转](# 开发设计)
+
+* #### 未来计划 [跳转](# 未来计划)
+
+* #### 历史回顾 [跳转](# 历史回顾)
+
+
+
+## 项目简介：
+
+
+
+**本项目由两个热爱幻想的学生独立制作完成。**
+
+**我们于初中第二学年度的年末创立本项目，于高中第二学年度的年末圆满完成此项目，但实际开发时间只有约两年。**
+
+ *(由于初中第三学年整年备考，而我中考意外失利，高中第一学年未从事开发，故实际开发时间约两年)*
+
+
+
+**制作人员分工：**
+
++ **220303 (盖力维)**
+  + 程序编写
+  + UI及美工
+  + 测试发行
+  + 后期维护
++ **Rebillion (李任)**
+  + 剧情创作
+
+
+
+**本项目分为两部分：**
+
+* ##### 文字游戏引擎：
+
+  此部分完全由我完成，基于`C#`、`.NET 8.0`、`WPF` 实现。
+
+  本项目很可能是**全网第一个WPF文字游戏引擎**。
+
+  基于自创的简单脚本格式和特定目录结构实现了剧情分支功能 (任意数量分支) ，只需要简单的 `.txt` 文本即可创造出几乎无限复杂度的剧情选择分支系统。
+
+  支持选项的条件输出，根据用户游玩历史决定当下的可选项。
+
+  基于 `Unicode` 字符集实现了全字符输出，脚本格式不会对文字创作者在剧情或选项的文本中插入的字符做出任何限制。
+
+  利用 `WPF` 中 `Textblock` 相关控件的印刷级输出和排版，实现了在不同 `字体`、`字号`、`颜色`、`粗体`、`斜体`、`下划线`、`删除线` 等属性下的逐字符输出。
+
+  实现了游戏页面设计， `UI` 设计，图片以及动画设计。
+
+
+
+* ##### 剧情创作：
+
+  此部分由Rebillion同志完全完成。
+
+  此部分将在6月末上线。
+
+在 `Release` 中，单独的文字游戏引擎部分和整体游戏都会打包发布，用户可任意下载。
+
+
+
+## 游戏教程：
+
+**游戏中内置了教程页面，将在第一次再开始界面点击或按下任意键时进入，内容如下：**
+
+```
+您好！
+
+这里是《烟尘记》的教程页面。
+
+注意：本游戏中键盘操作需要您使用英文输入法。
+
+在下次进入游戏时，您将处于”开始界面“，本教程页面将不再自动出现，您可以在 ”开始界面“ 中按下 ' shift '+' / ' 来切换到此教程页面。
+
+进入游戏时窗口默认为沉浸式全屏，在任意页面中，您都可以通过按下 ' F12 ' 进入或退出沉浸式全屏。
+注意：若您的显示器长宽比例远大于16:9 (1920:1080)，那么沉浸式全屏的游戏效果将会非常糟糕，建议您按F12退出该模式，并调整窗口到合适的长宽比例。
+
+在 "开始页面" 中，您可以通过按下 ' shift '+' : ' 进入 "设置页面" 。
+在 "设置页面" 中，您可以调整程序字体大小、剧情字体大小、背景音乐音量。
+注意：点击 "保存设置" 时，合法的输入将会被写入，而不合法的输入将不会被写入。此外，没有 "恢复默认设置" 功能。
+在 "设置页面" 中，您可以通过按下 ' shift '+' : ' 返回。
+
+在 "开始页面" 中，您可以通过按下 ' shift '+' A ' 进入 "存档管理页面" 。
+在 "存档管理页面" 中，您可以通过在存档列表中选择存档来将其置为 "活动存档" ，您也可以新建存档或删除选中的存档。
+在 "存档管理页面" 中，您可以通过按下 ' shift '+' A ' 返回。
+
+在 "开始页面" 中，您可以通过按下其他任意键或鼠标点击屏幕进入 "活动存档" 开始游戏，若没有任何存档被选为 "活动存档" ，您将进入 "新建存档页面" 。
+
+在 "游戏页面" 中，您可以通过按下 ' shift '+' : ' 进入 "设置页面" 。
+在 "设置页面" 中，您可以通过按下 ' shift '+' : ' 返回。
+
+在 "游戏页面" 中，您可以通过按下 ' Esc ' 进入 "暂停页面" 。
+在 "暂停页面" 中，您可以选择保存当前游戏进度，退出到 "开始页面" ，或直接退出游戏至桌面。
+注意：未保存的游戏进度会在退出后丢失，但这也给了您一次从头再来的机会，不是吗 ......
+在 "暂停页面" 中，您可以通过按下 ' Esc ' 返回。
+
+在 "游戏页面" 中，您可以通过按下其他任意键或鼠标点击来获取新的剧情或选项。
+在 "游戏页面" 中，您可以鼠标点击选项按钮或键盘按下对应数字键 (从1记起) 来做出选择。
+在 "游戏页面" 中，您可以用鼠标滚轮浏览曾经的剧情。
+注意：记忆是会消失的，您只能回溯本次游玩的剧情。
+
+现在，请按下任意键或点击鼠标，您即将进入 "新建存档页面"
+
+```
+
+
 
 ## 基本架构：
-* #### MainWindows
-  > Start
-  >
-  > Rebillion qoutes
-  >
-  > New start   
-  >
-  > Game  
-  >
-  > Pause
-  >
-  > Trace  
-  >
-  > Option  
-* #### 后台类库  
-  > 烟尘记游戏  
-  >
-  > Data 
+
+* #### WPF界面
+
+  + 窗体
+
+    > MainWindows
+
+  + 页面
+
+    > Start
+    >
+    > Rebillion qoutes
+    >
+    > New start
+    >
+    > Game
+    >
+    > Pause
+    >
+    > Trace
+    >
+    > Option
+
+* #### 后台类库
+
+  + 游戏逻辑类
+
+    > 烟尘记游戏  
+
+  + 交互效果及控件类
+
+    > Button_animation
+    >
+    > Page_frame
+    >
+    > Music_player
+
+  + 全局数据类
+
+    > Data
+    >
+    > Rebillion_qoute
+    >
+    > Save
+    >
+    > Option
+
+
 
 ## 开发设计：
 
@@ -27,14 +176,11 @@
 
 作为游戏的主窗口，也是唯一的窗口，所有的游戏界面都作为页面在其上切换，采用`Frame`框架来承载页面，并且隐藏导航栏。它的构造函数包括初始化`Frame`和加载`Start`页面，它的析构函数种包含写入存档和设置文件。
 
-##### 页面切换动画：
+##### 交互相关：
+
+`Window_KeyDown(object sender, KeyEventArgs e)`：用户按下 `F12` 时进入或退出沉浸式全屏。
 
 `MainWindow.xaml`：添加蒙版层，用于展示页面切换动画以及屏蔽动画发生时的输入。
-
-`MainWindow.xaml.cs`：监听并处理`Page_frame.Navigating`，`Page_frame.Navigated` 两个导航事件，分别代表页面切出和切入。
-
-* `MainFrame_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)`：页面切出动画，蒙版由透明转不透明 (全黑)
-* `MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)`：页面切入动画，蒙版由不透明 (全黑)转透明
 
 #### `Start`页面：
 
@@ -46,9 +192,11 @@
 >
 > 键盘：
 >
-> * 输入 `shift`+`;`进入`Option`页面。
+> * 输入 `shift`+`;` 进入 `Option` 页面。
 >
-> * 输入 `shift`+`a`进入`Trace`页面。
+> * 输入 `shift`+`a` 进入 `Trace` 页面。
+>
+> * 输入 `shift`+`/` 进入`Tutorial` 页面
 >
 > * 按其余任意键进入游戏。
 >
@@ -56,12 +204,12 @@
 
 * `Start()`：初始化背景、水波纹、聚焦键盘输入
 * `Start_game()`：执行 *进入游戏* 逻辑，会有两种情况，一是什么都存档都没有，则进入`New_start`界面创建新的存档；二是有存档，那么`Option`文件中必然有`save_choose`值，则进入`Ribillion_qoutes`页面。
-* `Page_KeyDown(object sender, KeyEventArgs e)`：根据用户输入进入`Trace`页面，`Option`页面，或调用`Start_game()`
-* `Page_MouseDown(object sender, MouseButtonEventArgs e)`：无条件调用`Start_game()`
+* `Page_KeyDown(object sender, KeyEventArgs e)`：根据用户输入进入`Trace`页面，`Option`页面，或调用`Start_game()` 开始游戏
+* `Page_MouseDown(object sender, MouseButtonEventArgs e)`：调用`Start_game()` 开始游戏
 
 ##### 背景：
 
-背景图是一张左右可以无缝衔接的`48:9`的图片 (豆包生成) ，通过两个并列的`Image`控件实现 (用户视角的) 横向循环播放。全部在`Start.xaml.cs`中实现。
+背景图是一张左右可以无缝衔接的`48:9`的图片，通过两个并列的`Image`控件实现 (用户视角的) 横向循环播放。全部在`Start.xaml.cs`中实现。
 
 * `scaled_width`：图片的宽度(根据窗口高度动态改变)
 * `speed`：移动速度，单位: 像素/秒
@@ -101,7 +249,7 @@
 
 输出李任语录。
 
-后台加载`Nodes`，如果没有可加载的就等`4`秒。
+后台加载`Nodes`，如果加载时间不够看完语录就等`6`秒。
 
 #### `Game`页面:
 
@@ -167,9 +315,15 @@
 
 实例类，其实例代表一局戏，在游戏开始时创建，游戏结束时销毁。
 
+`Story_directory_path`：存放剧情和选项的目录。
+
+`Text_style`：文字风格结构体。
+
+`Text_fragment`：风格相同的文字片段。
+
 `Choice`：`Choice`结构，含有`Content`，`Jump`，`condition`，分别代表选项文字，选项要跳转到的`Node`编号，选项可用的条件。`Choice(string content, int jump, List<string> condition)`是构造函数，`Check(List<string> check_record)`是自带的方法，用于根据用户游玩历史判断选项是否可用。
 
-`Node`结构：含有`Plot`，`Choices`，分别代表节点的剧情内容和选项列表，`Node(string plot, List<Choice> choices)`是构造函数。
+`Node`结构：含有`Plot`，`Choices`，分别代表节点的剧情内容和选项列表，`public Node(List<Text_fragment> plot, List<Choice> choices)` 是构造函数。
 
 `Nodes`：全局唯一的剧情节点列表，包含所有剧情及选项。
 
@@ -177,23 +331,63 @@
 
 `Record`：读取自某个存档`Save`，代表该存档过去的游戏历史。
 
-`Plot_directory_path`：存放`Plots`的位置。
-
-`Choices_directory_path`：存放`Choices`的位置。
-
 `Nodes_read_in()`：读取所有剧情及选项，在游戏启动时使用。
 
 `Choose(int input)`：根据玩家的选择切换到下一个`Node`。
 
-`烟尘记游戏(Data.Save save)`构造函数：给定一个存档`Save`，可以构造一个`烟尘记游戏`的实例。
-
 `Save_game()`函数：用于保存进度到程序内的`Saves`。
+
+`烟尘记游戏(Data.Save save)`构造函数：给定一个存档`Save`，可以构造一个`烟尘记游戏`的实例。
 
 #### Library.cs 类库：
 
 准确的来说`Library.cs`只是个普通`C#`代码文件，因为我尝试过使用分离项目的类库，若类库引用主程序会造成循环依赖，但其中的`Data`类里面的`Main_window`需要引用主程序中的`MainWindow`来将其全局化，所以不能这样构建项目。
 
-包含所有全局数据，包括`Data`，`Rebillion Qoute`，`Save`，`Option`这几个静态类。
+包含所有全局类，包括：`Button_animation`，`Music_player`，`Page_frame` 这几个UI效果与交互类；`Data`，`Rebillion Qoute`，`Save`，`Option` 这几个全局数据类。
+
+##### `Button_animation`类
+
+`ParticleColorScheme`：粒子动画主题色结构体。
+
+`Animation(Button button, ParticleColorScheme colors)`：播放并耐心等待按钮的粒子动画完成。
+
+`button_animation(Button button, ParticleColorScheme colors)`：粒子扩散动画。
+
+`get_random_point_on_border(Rect rect, double borderThickness, Random rand)`：在按钮边框上生成随机点。
+
+`calculate_particle_count(Button button)`：根据按钮周长计算需要的粒子数量。
+
+##### `Music_player`类
+
+`Music_directory_path`：存放背景音乐的位置。
+
+`music_player`：全局唯一静态音乐播放器，保存`MainWindow中的Global_media_element`。
+
+`Current_music_page_group`：当前页面所属的`音乐播放页面分组`的记录。
+
+`Start(string Current_music_page_group)`静态函数：初始化`Global_music`，在程序启动时使用，`Change_music(object sender, NavigationEventArgs e)`：页面切换事件的处理程序，负责根据不同的`音乐播放页面分组`更换背景音乐。
+
+##### `Page_frame` 类：
+
+`Navigate_permit`：类内部防抖变量。
+
+`black_mask;`：存放对Mainwindow的动画蒙版对象的引用。
+
+`page_frame`：存放对Mainwindow的Frame对象的引用。
+
+`Page_in_storyboard`：页面切入的导航动画。
+
+`Page_out_storyboard`：页面切出的导航动画。
+
+`Navigation_animation_Initialize(Frame page_frame, Rectangle black_mask)`：导航动画初始化函数。
+
+`AwaitStoryboardAsync(Storyboard storyboard)`：把故事板动画封装为可等待的Task(当然，直接使用了black_mask引用)。
+
+`Navigate(object content)`：带有切页动画的导航到新一页逻辑。
+
+`Go_back()`：带有切页动画的返回上一页逻辑。
+
+
 
 ##### `Data`类：
 
@@ -205,21 +399,9 @@
 
 `Main_window`：为`MainWindow`生成的一个全局对象，使得在其他`Page`和类中也能访问到`MainWindow`中的内容：
 
-* 通过`Data.MainWindow.Page_frame.NavigationService.GoBack()`来返回上一个页面。
-* 通过`Data.Main_window.Page_frame.NavigationService.Navigate(Page newpage)`来导航到新页面。
 * 通过`Data.Main_window.global_media_element`访问`MainWindow`中的音乐播放器。
 * 通过`Data.Main_window.Page_frame.Navigated += Change_music`监听`Frame`导航来更改音乐。
 * 通过`Data.Main_window.Close();`调用关闭代码。
-
-##### `Music_player`类
-
-`Music_directory_path`：存放背景音乐的位置。
-
-`music_player`：全局唯一静态音乐播放器，保存`MainWindow中的Global_media_element`。
-
-`Current_music_page_group`：当前页面所属的`音乐播放页面分组`的记录。
-
-`Start(string Current_music_page_group)`静态函数：初始化`Global_music`，在程序启动时使用，`Change_music(object sender, NavigationEventArgs e)`：页面切换事件的处理程序，负责根据不同的`音乐播放页面分组`更换背景音乐。
 
 ##### `Rebillion_qoute`类
 
@@ -255,17 +437,23 @@
 
 `Music_volume`：背景音乐音量大小。
 
+`start_picture_speed`：开始屏幕图片滚动速度。
+
+`tutorial_completed`：教程完成标志位。
+
 `Read_in()`静态函数：用来读取置文件，在游戏启动时使用。
 
 `Wrtie_out()`全局静态函数：写入设置文件，在保存设置时使用。
 
 
+
 ## 未来计划：
+
 * #### 第二阶段开发
   
-  * [ ] 编写自定义用户控件，替换掉原有的默认控件
+  * [x] 编写自定义用户控件，替换掉原有的默认控件
   * [x] 增加音频播放功能
-  * [ ] 制作内嵌视频与动画
+  * [x] 制作内嵌视频与动画
   * [ ] 催Rebillion同志交稿
   
 * #### 跨平台移植
@@ -275,6 +463,33 @@
   
 
 ## 历史回顾：
+
+***2025年6月2日21：27***
+
+**本次更新是有史以来更新量最大的一次**。
+
+经过半个月的高强度开发，我已经完成了项目的  `99%` 。
+
+这半个月里我把所有的休假时间全部用来开发本项目。
+
+举个例子，今天，昨天，前天，这三天端午节假期，我什么都没干，全力开发本项目，每天干 `12` 个小时以上。
+
+我经历了许多失败，更改了许多 `Bug` ，做了数不清的重构。
+
+`VS2022` 的 `Git` 组件显示我所有的项目文件全都有更新(当然 `.gitignore` 不变)，单是 `更改数` 就足足由 `106` 个，这些更改几乎都是添加或重写了几十上百行代码。
+
+我现在甚至没有力气将他们一一说清，下面简要介绍一下重大更新内容。详细的变更可以看 `git commit`记录。
+
+* 彻底重写整个文字相关逻辑，利用 `WPF` 中 `Textblock` 相关控件的印刷级输出和排版，实现了在不同 `字体`、`字号`、`颜色`、`粗体`、`斜体`、`下划线`、`删除线` 等属性下的逐字符输出。
+* 重新定义原创的文字工作脚本语法，增加诸多功能的同时，Rebillion同志仅需使用简单的 `.txt` 文件和特定的目录结构即可完成复杂的剧情分支创作与字符属性设置。 
+
+* 重构了切页动画的逻辑，采用了自己组合的 `Page_frame` 类，完美实现了切页防抖。
+* 为所有页面的按钮编写 `Style` 以及点击粒子动画，并为不同页面设计不同的主题色资源。
+* 为 `Trace` 页面的 `Listbox` 制作 `Style` 。
+* 为所有需要的 `Textblock` 等控件以及各个 `Style`中的文本 添加 `Viewbox` 来保持视觉效果。
+* 制作整个 `Tutorial` 页面。
+* 制作整个 `Credit` 页面。
+* 为需要的页面实现简单的边框 (这个我还不满意，后面还会改)。
 
 *** 2025年5月18日21：01***
 

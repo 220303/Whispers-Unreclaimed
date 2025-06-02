@@ -8,3 +8,7 @@ global using System.Windows.Threading;
 global using static System.Convert;
 global using System.Collections.ObjectModel;
 global using System.Text.RegularExpressions;
+global using System.Globalization;
+global using System.Windows.Media.Animation;
+global using System.Windows.Documents;
+global using System.Windows.Shapes;
