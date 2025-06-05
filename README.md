@@ -10,21 +10,23 @@
 
 * #### 游戏教程 [跳转](#游戏教程)
 
+* #### 未来计划 [跳转](#未来计划)
+
 * #### 基本架构 [跳转](#基本架构)
 
 * #### 开发设计 [跳转](#开发设计)
-
-* #### 未来计划 [跳转](#未来计划)
 
 * #### 历史回顾 [跳转](#历史回顾)
 
 
 
+-------
+
+
+
 ## 项目简介：
 
-
-
-**本项目由两个热爱幻想的学生独立制作完成。**
+#### 本项目由两个热爱幻想的学生独立制作完成。
 
 ##### 我们于 *2022年9月12日 21：49* 创立本项目，于 *???* 圆满完成此项目，但实际开发时间只有不足一年。
 
@@ -32,7 +34,7 @@
 
 
 
-**制作人员分工：**
+#### 制作人员分工：
 
 + **220303 (盖力维)**
   + 程序编写
@@ -45,7 +47,7 @@
 
 
 
-**本项目分为两部分：**
+#### 本项目分为两部分：
 
 * ##### 文字游戏引擎：
 
@@ -71,11 +73,11 @@
 
   此部分将在6月末上线。
 
-在 `Release` 中，单独的文字游戏引擎部分和整体游戏都会打包发布，用户可任意下载。
+**在 `Release` 中，单独的文字游戏引擎部分和整体游戏都会打包发布，用户可任意下载。**
 
 
 
-##### 项目开源协议：
+#### 项目开源协议：
 
 #### CC BY-NC 4.0
 
@@ -84,6 +86,10 @@
 This license requires that reusers give credit to the creator. It allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, for noncommercial purposes only.
 
 详见 `LICENSE` 页面。
+
+
+
+-------------
 
 
 
@@ -130,6 +136,30 @@ This license requires that reusers give credit to the creator. It allows reusers
 现在，请按下任意键或点击鼠标，您即将进入 "新建存档页面"
 
 ```
+
+
+
+-------------
+
+
+
+## 未来计划：
+
+* #### 第二阶段开发
+
+  * [x] 编写自定义用户控件，替换掉原有的默认控件
+  * [x] 增加音频播放功能
+  * [x] 制作内嵌视频与动画
+  * [ ] 催Rebillion同志交稿
+
+* #### 未来发展
+
+  - [ ] 分离游戏引擎，作为单独的项目，本项目只作为《烟尘记》游戏本身。
+  - [ ] 游戏引擎跨平台移植：采用基于.NET 的跨平台框架，有可能是 `WPF` 的上游 `Avalonia` 框架
+
+
+
+-------
 
 
 
@@ -180,6 +210,10 @@ This license requires that reusers give credit to the creator. It allows reusers
     > Save
     >
     > Option
+
+
+
+-------------
 
 
 
@@ -460,20 +494,9 @@ This license requires that reusers give credit to the creator. It allows reusers
 
 
 
-## 未来计划：
+-------------
 
-* #### 第二阶段开发
-  
-  * [x] 编写自定义用户控件，替换掉原有的默认控件
-  * [x] 增加音频播放功能
-  * [x] 制作内嵌视频与动画
-  * [ ] 催Rebillion同志交稿
-  
-* #### 跨平台移植
-  > 采用基于.NET 的跨平台框架
-  > 很有可能是 WPF 的上游 avalonia 框架
 
-  
 
 ## 历史回顾：
 
