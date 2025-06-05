@@ -26,9 +26,9 @@
 
 **本项目由两个热爱幻想的学生独立制作完成。**
 
-**我们于初中第二学年度的年末创立本项目，于高中第二学年度的年末圆满完成此项目，但实际开发时间只有约两年。**
+##### 我们于 *2022年9月12日 21：49* 创立本项目，于 *???* 圆满完成此项目，但实际开发时间只有不足一年。
 
- *(由于初中第三学年整年备考，而我中考意外失利，高中第一学年未从事开发，故实际开发时间约两年)*
+ *(由于初中第三学年整年备考，而我中考意外失利，高中第一学年未从事开发，故实际开发时间不足一年)*
 
 
 
@@ -41,6 +41,7 @@
   + 后期维护
 + **Rebillion (李任)**
   + 剧情创作
+  + Logo 设计
 
 
 
@@ -71,6 +72,18 @@
   此部分将在6月末上线。
 
 在 `Release` 中，单独的文字游戏引擎部分和整体游戏都会打包发布，用户可任意下载。
+
+
+
+##### 项目开源协议：
+
+#### CC BY-NC 4.0
+
+##### Creative Commons Attribution-NonCommercial 4.0 International
+
+This license requires that reusers give credit to the creator. It allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, for noncommercial purposes only.
+
+详见 `LICENSE` 页面。
 
 
 
