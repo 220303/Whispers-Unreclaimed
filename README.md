@@ -531,7 +531,7 @@ This license requires that reusers give credit to the creator. It allows reusers
 
 -----
 
-*** 2025年5月18日21：01***
+***2025年5月18日21：01***
 
 到现在我又完成了一个目标，成功写出了全局页面切换动画，也就是说所有页面之间的切换已经搞定了！我和AI讨论了好久，也采用过他们的好几版不同的方案实验修改了很久，但都因为反复尝试还是无法修改的致命缺陷被我一票否决。好在我在这一过程中了解了相关内容，最终直接自己原创了一版出来，完美符合要求！
 
@@ -539,7 +539,7 @@ This license requires that reusers give credit to the creator. It allows reusers
 
 -----
 
-*** 2025年5月18日14：54***
+***2025年5月18日14：54***
 
 今天是个值得纪念的日子！
 
