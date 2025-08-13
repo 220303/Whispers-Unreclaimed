@@ -1,11 +1,4 @@
-﻿using System.Net.NetworkInformation;
-using System.Printing.IndexedProperties;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
-using System.Windows.Media.Media3D;
-using System.Windows.Shapes;
-namespace 烟尘记
+﻿namespace 烟尘记
 {
 
     /// <summary>
@@ -17,9 +10,9 @@ namespace 烟尘记
         {
             InitializeComponent();
 
-            Plot_font_size_Textbox.Text = Convert.ToString(Option.plot_font_size);
-            Plot_print_speed_Textbox.Text = Convert.ToString(Option.plot_print_speed);
-            Music_volume_Textbox.Text = Convert.ToString(Option.music_volume * 10000);
+            Plot_font_size_Slider.Value = Option.plot_font_size;
+            Plot_print_speed_Slider.Value = Option.plot_print_speed;
+            Music_volume_Slider.Value = Option.music_volume;
 
             this.Loaded += (s, e) => this.Focus();                                                               //确保焦点汇聚到page上
         }
@@ -51,23 +44,17 @@ namespace 烟尘记
 
             //播放并耐心等待按钮的粒子动画完成
             await Button_animation.Animation((Button)sender, Green_colors);
-            if (Regex.IsMatch(Plot_font_size_Textbox.Text, @"^\d+$"))
-            {
-                Option.plot_font_size = ToInt32(Plot_font_size_Textbox.Text);
-            }
-            if (Regex.IsMatch(Plot_print_speed_Textbox.Text, @"^\d+$"))
-            {
-                Option.plot_print_speed = ToInt32(Plot_print_speed_Textbox.Text);
-            }
-            if (Regex.IsMatch(Music_volume_Textbox.Text, @"^\d+$"))
-            {
 
-                Option.music_volume = ToDouble(Music_volume_Textbox.Text) / 10000.0;
+            Option.plot_font_size = (double)Plot_font_size_Slider.Value;
 
-                //使得音量更改立即生效
-                Music_player.music_player.Volume = Option.music_volume;
+            Option.plot_print_speed = (Int16)(Plot_print_speed_Slider.Value);
 
-            }
+            Option.music_volume = Music_volume_Slider.Value;
+
+            //使得音量更改立即生效
+            Music_player.music_player.Volume = Option.music_volume;
+
+
 
             //保存Options到文件
             Option.Wrtie_out();
@@ -81,4 +68,52 @@ namespace 烟尘记
 
     }
 
+    public class F0FontSizeToStringConverter : IValueConverter
+    //滑块数值显示转换器
+    {
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((double)value).ToString("F0"); // 显示整数部分
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (double.TryParse(value?.ToString(), out double result))
+                return result;
+            return 0;
+        }
+    }
+    public class F2FontSizeToStringConverter : IValueConverter
+    //滑块数值显示转换器
+    {
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((double)value).ToString("F2"); // 显示2位小数
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (double.TryParse(value?.ToString(), out double result))
+                return result;
+            return 0;
+        }
+    }
+    public class Music_FontSizeToStringConverter : IValueConverter
+    //滑块数值显示转换器
+    {
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (Math.Round((double)value,3)*1000).ToString(); //将slider的value四舍五入到三位小数再乘1000变为整数，再转换为字符串显示。
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (double.TryParse(value?.ToString(), out double result))
+                return result;
+            return 0;
+        }
+    }
 }

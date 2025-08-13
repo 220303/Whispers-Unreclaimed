@@ -186,7 +186,7 @@
     <Grid x:Name="Total_grid">
 
         <!--  自定义控件用于绘制边框  -->
-        <local:MagicCornerBorder_Rebillion_qoutes
+        <local:MagicCornerBorder_Pause
             x:Name="Border_drawer"
             Background="Transparent"
             IsHitTestVisible="False" />

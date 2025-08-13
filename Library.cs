@@ -1,9 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
-using System.Windows.Shapes;
-
-namespace 烟尘记
+﻿namespace 烟尘记
 {
 
     #region UI、交互类
@@ -232,6 +227,170 @@ namespace 烟尘记
             InvalidateVisual();
         }
     }
+    public class MagicCornerBorder_Option : Canvas
+    {
+        // 可配置属性
+        public double MarginFromEdge { get; set; } = 40;
+        public double OffsetFromCorner { get; set; } = 20;
+        public double StrokeThickness { get; set; } = 2;
+
+        private const double PatternSize = 80;
+
+        /// <summary>
+        /// 重绘控件时绘制四角装饰和边框。
+        /// </summary>
+        protected override void OnRender(DrawingContext dc)
+        {
+            base.OnRender(dc);
+            double width = ActualWidth;
+            double height = ActualHeight;
+
+            // 四角中心点
+            var corners = new[]
+            {
+                new Point(MarginFromEdge + OffsetFromCorner, MarginFromEdge + OffsetFromCorner),
+                new Point(width - MarginFromEdge - OffsetFromCorner, MarginFromEdge + OffsetFromCorner),
+                new Point(width - MarginFromEdge - OffsetFromCorner, height - MarginFromEdge - OffsetFromCorner),
+                new Point(MarginFromEdge + OffsetFromCorner, height - MarginFromEdge - OffsetFromCorner)
+            };
+
+            // 计算边缘位置
+            double half = PatternSize / 2;
+            double leftX = MarginFromEdge + OffsetFromCorner - half;
+            double rightX = width - MarginFromEdge - OffsetFromCorner + half;
+            double topY = MarginFromEdge + OffsetFromCorner - half;
+            double bottomY = height - MarginFromEdge - OffsetFromCorner + half;
+
+            // 绘制四条边
+            DrawFadingLineSymmetric(dc, new Point(leftX, topY), new Point(rightX, topY));
+            DrawFadingLineSymmetric(dc, new Point(leftX, bottomY), new Point(rightX, bottomY));
+            DrawFadingLineSymmetric(dc, new Point(leftX, topY), new Point(leftX, bottomY));
+            DrawFadingLineSymmetric(dc, new Point(rightX, topY), new Point(rightX, bottomY));
+        }
+
+        /// <summary>
+        /// 绘制带渐变的边线（对称两段）。
+        /// </summary>
+        private void DrawFadingLineSymmetric(DrawingContext dc, Point start, Point end)
+        {
+            Point mid = new Point((start.X + end.X) / 2, (start.Y + end.Y) / 2);
+            DrawFadingLine(dc, start, mid);
+            DrawFadingLine(dc, end, mid);
+        }
+
+        /// <summary>
+        /// 绘制一段带渐变的线。
+        /// </summary>
+        private void DrawFadingLine(DrawingContext dc, Point from, Point to)
+        {
+            var gradient = new LinearGradientBrush(Colors.DarkGreen, Colors.Transparent, 0.0)
+            {
+                StartPoint = new Point(0, 0),
+                EndPoint = new Point(1, 0),
+                RelativeTransform = new RotateTransform(
+                    Math.Atan2(to.Y - from.Y, to.X - from.X) * 180 / Math.PI, 0.5, 0.5)
+            };
+            var pen = new Pen(gradient, StrokeThickness)
+            {
+                StartLineCap = PenLineCap.Round,
+                EndLineCap = PenLineCap.Round
+            };
+            dc.DrawLine(pen, from, to);
+        }
+
+
+        /// <summary>
+        /// 尺寸变化时重绘。
+        /// </summary>
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            base.OnRenderSizeChanged(sizeInfo);
+            InvalidateVisual();
+        }
+    }
+    public class MagicCornerBorder_Pause : Canvas
+    {
+        // 可配置属性
+        public double MarginFromEdge { get; set; } = 40;
+        public double OffsetFromCorner { get; set; } = 20;
+        public double StrokeThickness { get; set; } = 2;
+
+        private const double PatternSize = 80;
+
+        /// <summary>
+        /// 重绘控件时绘制四角装饰和边框。
+        /// </summary>
+        protected override void OnRender(DrawingContext dc)
+        {
+            base.OnRender(dc);
+            double width = ActualWidth;
+            double height = ActualHeight;
+
+            // 四角中心点
+            var corners = new[]
+            {
+                new Point(MarginFromEdge + OffsetFromCorner, MarginFromEdge + OffsetFromCorner),
+                new Point(width - MarginFromEdge - OffsetFromCorner, MarginFromEdge + OffsetFromCorner),
+                new Point(width - MarginFromEdge - OffsetFromCorner, height - MarginFromEdge - OffsetFromCorner),
+                new Point(MarginFromEdge + OffsetFromCorner, height - MarginFromEdge - OffsetFromCorner)
+            };
+
+            // 计算边缘位置
+            double half = PatternSize / 2;
+            double leftX = MarginFromEdge + OffsetFromCorner - half;
+            double rightX = width - MarginFromEdge - OffsetFromCorner + half;
+            double topY = MarginFromEdge + OffsetFromCorner - half;
+            double bottomY = height - MarginFromEdge - OffsetFromCorner + half;
+
+            // 绘制四条边
+            DrawFadingLineSymmetric(dc, new Point(leftX, topY), new Point(rightX, topY));
+            DrawFadingLineSymmetric(dc, new Point(leftX, bottomY), new Point(rightX, bottomY));
+            DrawFadingLineSymmetric(dc, new Point(leftX, topY), new Point(leftX, bottomY));
+            DrawFadingLineSymmetric(dc, new Point(rightX, topY), new Point(rightX, bottomY));
+        }
+
+        /// <summary>
+        /// 绘制带渐变的边线（对称两段）。
+        /// </summary>
+        private void DrawFadingLineSymmetric(DrawingContext dc, Point start, Point end)
+        {
+            Point mid = new Point((start.X + end.X) / 2, (start.Y + end.Y) / 2);
+            DrawFadingLine(dc, start, mid);
+            DrawFadingLine(dc, end, mid);
+        }
+
+        /// <summary>
+        /// 绘制一段带渐变的线。
+        /// </summary>
+        private void DrawFadingLine(DrawingContext dc, Point from, Point to)
+        {
+            var gradient = new LinearGradientBrush(Colors.DarkBlue, Colors.Transparent, 0.0)
+            {
+                StartPoint = new Point(0, 0),
+                EndPoint = new Point(1, 0),
+                RelativeTransform = new RotateTransform(
+                    Math.Atan2(to.Y - from.Y, to.X - from.X) * 180 / Math.PI, 0.5, 0.5)
+            };
+            var pen = new Pen(gradient, StrokeThickness)
+            {
+                StartLineCap = PenLineCap.Round,
+                EndLineCap = PenLineCap.Round
+            };
+            dc.DrawLine(pen, from, to);
+        }
+
+
+        /// <summary>
+        /// 尺寸变化时重绘。
+        /// </summary>
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            base.OnRenderSizeChanged(sizeInfo);
+            InvalidateVisual();
+        }
+    }
+
+
 
 
     public static class Button_animation
@@ -468,7 +627,7 @@ namespace 烟尘记
                                 music_player.Source = new Uri(Music_directory_path + "程序背景音.mp3", UriKind.RelativeOrAbsolute);
                                 break;
                             case "game":
-                                music_player.Source = new Uri(Music_directory_path + "游戏背景音.wav", UriKind.RelativeOrAbsolute);
+                                music_player.Source = new Uri(Music_directory_path + "游戏背景音.mp3", UriKind.RelativeOrAbsolute);
                                 break;
                         }
 

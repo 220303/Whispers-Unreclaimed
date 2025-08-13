@@ -1,10 +1,4 @@
-﻿ using System.Globalization;
-using System.Windows.Data;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
-using System.Windows.Shapes;
-
-namespace 烟尘记
+﻿namespace 烟尘记
 {
     /// <summary>
     /// Pause.xaml 的交互逻辑

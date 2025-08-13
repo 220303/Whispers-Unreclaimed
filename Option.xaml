@@ -180,12 +180,17 @@
             <Setter Property="TextElement.Foreground" Value="{StaticResource TextBrush}" />
         </Style>
 
+        <!--滑块数值显示转换器-->
+        <local:F0FontSizeToStringConverter x:Key="F0FontSizeToStringConverter" />
+        <local:F2FontSizeToStringConverter x:Key="F2FontSizeToStringConverter" />
+        <local:Music_FontSizeToStringConverter x:Key="Music_FontSizeToStringConverter" />
+
     </Page.Resources>
 
     <Grid x:Name="Total_grid">
 
         <!--  自定义控件用于绘制边框  -->
-        <local:MagicCornerBorder_Rebillion_qoutes
+        <local:MagicCornerBorder_Option
             x:Name="Border_drawer"
             Background="Transparent"
             IsHitTestVisible="False" />
@@ -206,6 +211,7 @@
                     <ColumnDefinition Width="5*" />
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="10*" />
+                    <ColumnDefinition Width="1.2*" />
                     <ColumnDefinition Width="8*" />
                 </Grid.ColumnDefinitions>
 
@@ -219,37 +225,96 @@
                     <RowDefinition Height="3*" />
                 </Grid.RowDefinitions>
 
-                <TextBox
-                    Name="Plot_font_size_Textbox"
+                <Slider
+                    Name="Plot_font_size_Slider"
                     Grid.Row="1"
                     Grid.Column="3"
-                    TextWrapping="Wrap" />
-                <TextBox
-                    Name="Plot_print_speed_Textbox"
-                    Grid.Row="3"
-                    Grid.Column="3"
-                    TextWrapping="Wrap" />
-                <TextBox
-                    Name="Music_volume_Textbox"
-                    Grid.Row="5"
-                    Grid.Column="3"
-                    TextWrapping="Wrap" />
+                    VerticalAlignment="Center"
+                    Maximum="200"
+                    Minimum="0" />
+                <Viewbox
+                    Grid.Row="1"
+                    Grid.Column="4"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Stretch="Uniform">
+                    <Label Content="{Binding ElementName=Plot_font_size_Slider, Path=Value, Converter={StaticResource F2FontSizeToStringConverter}}" Foreground="White" />
+                </Viewbox>
 
-                <Label
+                <Slider
+                    Name="Plot_print_speed_Slider"
+                    Grid.Row="3"
+                    Grid.Column="3"
+                    VerticalAlignment="Center"
+                    Maximum="500"
+                    Minimum="0" />
+                <Viewbox
+                    Grid.Row="3"
+                    Grid.Column="4"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Stretch="Uniform">
+                    <Label Content="{Binding ElementName=Plot_print_speed_Slider, Path=Value,Converter={StaticResource F0FontSizeToStringConverter} }" Foreground="White" />
+                </Viewbox>
+
+                <Slider
+                    Name="Music_volume_Slider"
+                    Grid.Row="5"
+                    Grid.Column="3"
+                    VerticalAlignment="Center"
+                    Maximum="1"
+                    Minimum="0" 
+                    TickFrequency="0.01"/>
+                <Viewbox
+                    Grid.Row="5"
+                    Grid.Column="4"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Stretch="Uniform">
+                    <Label Content="{Binding ElementName=Music_volume_Slider, Path=Value, Converter={StaticResource Music_FontSizeToStringConverter}}" Foreground="White" />
+                </Viewbox>
+
+
+
+
+                <Viewbox
                     Grid.Row="1"
                     Grid.Column="1"
-                    Content="字体大小"
-                    Foreground="White" />
-                <Label
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Stretch="Uniform">
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Content="字体大小"
+                        Foreground="White" />
+                </Viewbox>
+                <Viewbox
                     Grid.Row="3"
                     Grid.Column="1"
-                    Content="文字输出速度"
-                    Foreground="White" />
-                <Label
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Stretch="Uniform">
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Content="文字输出速度"
+                        Foreground="White" />
+                </Viewbox>
+                <Viewbox
                     Grid.Row="5"
                     Grid.Column="1"
-                    Content="音乐声音"
-                    Foreground="White" />
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Stretch="Uniform">
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Content="音乐声音"
+                        Foreground="White" />
+                </Viewbox>
+
+
 
             </Grid>
 

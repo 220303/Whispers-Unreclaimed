@@ -182,6 +182,12 @@
 
     <Grid x:Name="Total_grid">
 
+        <!--  自定义控件用于绘制边框  -->
+        <local:MagicCornerBorder_Trace
+            x:Name="Border_drawer"
+            Background="Transparent"
+            IsHitTestVisible="False" />
+
         <Grid x:Name="Content_grid">
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*" />

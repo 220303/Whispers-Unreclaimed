@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static 烟尘记.烟尘记游戏;
 
 namespace 烟尘记
 {
@@ -133,7 +134,7 @@ namespace 烟尘记
 
         public void Nodes_read_in()
         {
-            //对于每个节点（遍历整个Story文件夹）
+            //对于每个节点（遍历整个Story文件夹中的每个子文件夹，不会管子文件，i代表节点文件名的数字，从1开始。）
             for (int i = 1; i <= Directory.GetDirectories(Story_directory_path).Length; i++)
             //解析节点
             {
@@ -149,7 +150,13 @@ namespace 烟尘记
                 #region 解析剧情
 
                 //读取剧情文件的所有内容，按行分割成数组
-                string[] plot_all_text_array = File.ReadAllText(plot_file_path).Split("\r\n");
+                string[] plot_all_text_array = File.ReadAllText(plot_file_path).Split("\n");
+
+                //去除各项末尾可能的\r
+                for (int m = 0; m < plot_all_text_array.Length; m++)
+                {
+                    plot_all_text_array[m] = plot_all_text_array[m].Trim(); //去除每行的前后可能的\r
+                }
 
                 //先按两行一组读取文件，并合并成一个Text_fragment对象，并处理换行符转换。
                 for (int j = 0; j < plot_all_text_array.Length; j += 2)
@@ -179,7 +186,7 @@ namespace 烟尘记
                         };
                     }
 
-                    //冻结Brush来避免在多线程环境下的异常
+                    //冻结Brush来避免在多线程环境下不能跨线程传递对象的异常
                     new_style.Foreground.Freeze();
 
                     //解析内容，添加Text_fragment
@@ -235,7 +242,14 @@ namespace 烟尘记
                     //解析选项文本文件
                     {
                         //从选项文件中读取所有内容并按行分割                          
-                        string[] choice_array = File.ReadAllText(choices_file_path + ToInt16(j) + ".txt").Split("\r\n");
+                        string[] choice_array = File.ReadAllText(choices_file_path + ToInt16(j) + ".txt").Split("\n");
+
+                        //去除各项末尾可能的\r
+                        for (int m = 0; m < choice_array.Length; m++)
+                        {
+                            choice_array[m] = choice_array[m].Trim(); //去除每行的前后可能的\r
+                        }
+
                         if (choice_array[1] == "")
                         //如果condition行是空行，说明没有条件，则将选项添加到节点中：Jump是从选项文件的第一行读取的数字，condition为null，内容是从第二行开始的所有内容。
                         {
