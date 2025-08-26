@@ -172,7 +172,7 @@ This license requires that reusers give credit to the creator. It allows reusers
   * [x] 制作 `Start` 页面内嵌视频与动画
   * [x] 催Rebillion同志交稿
   * [x] `程序背景音` 和 `游戏背景音` 制作
-  * [ ] Logo制作
+  * [x] Logo制作
 
 * #### 未来发展
 
