@@ -17,21 +17,21 @@
 
     <Page.Resources>
 
-        <!--  金色主题颜色资源-->
+        <!--  金色主题颜色资源  -->
         <Color x:Key="BorderColor">#D4AF37</Color>
-        <!-- 主金色 -->
+        <!--  主金色  -->
         <Color x:Key="GlowColor">#FFEC8B</Color>
-        <!-- 浅金色光晕 -->
+        <!--  浅金色光晕  -->
         <Color x:Key="TextColor">#FFF8DC</Color>
-        <!-- 米白色文本 -->
+        <!--  米白色文本  -->
         <Color x:Key="TextHoverColor">#FFD700</Color>
-        <!-- 亮金色 -->
+        <!--  亮金色  -->
         <Color x:Key="TextShadowColor">#D4AF37</Color>
-        <!-- 主金色光晕 -->
+        <!--  主金色光晕  -->
         <Color x:Key="PressedBorderColor">#B8860B</Color>
-        <!-- 深金色 -->
+        <!--  深金色  -->
         <Color x:Key="BackgroundColor">Black</Color>
-        <!-- 保持背景为黑色 -->
+        <!--  保持背景为黑色  -->
 
         <!--  金色主题画刷资源（名称不变）  -->
         <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}" />
@@ -99,7 +99,7 @@
                             </Grid>
 
                             <!--  粒子效果层  -->
-                            <Canvas x:Name="ParticleCanvas" IsHitTestVisible="False" />
+                            <local:ParticleCanvas x:Name="ParticleCanvas" IsHitTestVisible="False"/>
 
                         </Grid>
 
@@ -219,11 +219,14 @@
         <Grid x:Name="Content_grid">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="14*" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="54*" />
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="6.5*" />
+                <!--<ColumnDefinition Width="14*" />-->
+                <ColumnDefinition Width="0*" />
+                <!--<ColumnDefinition Width="1*" />-->
+                <ColumnDefinition Width="0*" />
+                <!--<ColumnDefinition Width="54*" />-->
+                <ColumnDefinition Width="60*" />
+                <ColumnDefinition Width="6.5*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*" />

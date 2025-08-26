@@ -193,12 +193,12 @@
 
         <Grid x:Name="Content_grid">
 
+            
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.8*" />
-                <ColumnDefinition Width="0.8*" />
+                <ColumnDefinition Width="1.5*" />
                 <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="0.8*" />
-                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1.5*" />
+
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -211,24 +211,26 @@
                 <RowDefinition Height="3*" />
             </Grid.RowDefinitions>
 
+
             <Button
                 Name="Save"
-                Grid.Row="3"
+                Grid.Row="1"
                 Grid.Column="1"
                 Click="Save_Click"
                 Content="保存" />
             <Button
-                Name="Quit"
-                Grid.Row="5"
-                Grid.Column="3"
-                Click="Quit_Click"
-                Content="退出" />
-            <Button
                 Name="Quit_to_Start"
-                Grid.Row="1"
-                Grid.Column="3"
+                Grid.Row="3"
+                Grid.Column="1"
                 Click="Quit_to_Start_Click"
                 Content="退出到开始界面" />
+            <Button
+                Name="Quit"
+                Grid.Row="5"
+                Grid.Column="1"
+                Click="Quit_Click"
+                Content="退出" />
+
 
         </Grid>
     </Grid>

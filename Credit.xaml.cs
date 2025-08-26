@@ -12,8 +12,10 @@
         private static string my_word_path = Credit_path + "My_word.txt";
         private static string Rebillion_word_path = Credit_path + "Rebillion_word.txt";
         private static string credit_text_path = Credit_path + "Credit.txt";
+        private static string finish_path = Credit_path + "Finish.txt";
 
         private bool credit_end;
+
 
         public Credit()
         {
@@ -23,12 +25,29 @@
             InitializeComponent();
 
             //读取文本文件内容到对应的文本框
+            finish.Text = File.ReadAllText(finish_path);
             plot_trailer.Text = File.ReadAllText(plot_trailer_path);
             my_word.Text = File.ReadAllText(my_word_path);
             Rebillion_word.Text = File.ReadAllText(Rebillion_word_path);
             credit_text.Text = File.ReadAllText(credit_text_path);
 
-            this.Loaded += (s, e) => this.Focus();                                                               //确保焦点汇聚到page上
+            //设置占位文本框的内容
+            blank_0.Text = "\n\n\n\n\n\n\n\n\n"; 
+            blank_1.Text = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+            blank_2.Text = "\n\n\n";
+            blank_3.Text = "\n\n\n\n\n";
+            blank_word.Text = "\n\n\n";
+            blank_4.Text = "\n\n\n\n\n\n\n\n";
+
+            //我和李任的话提示词
+            me.Inlines.Add(new Run("220303") { Foreground = Brushes.Cyan });
+            me.Inlines.Add(new Run(" >>> ") { Foreground = Brushes.DarkOrange });
+            rebillion.Inlines.Add(new Run(" <<< ") { Foreground = Brushes.ForestGreen });
+            rebillion.Inlines.Add(new Run("Rebillion") { Foreground = Brushes.Magenta });
+
+
+            //确保焦点汇聚到page上
+            this.Loaded += (s, e) => this.Focus();                                                         
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -44,8 +63,8 @@
                 {
                     From = viewerHeight,
                     To = -contentHeight,
-                    Duration = TimeSpan.FromSeconds(10),
-                    RepeatBehavior = new RepeatBehavior(1) // Forever 可循环
+                    Duration = TimeSpan.FromSeconds(370),  //总滚动时间/秒
+                    RepeatBehavior = new RepeatBehavior(1) // 循环次数(Forever 无限循环)
                 };
 
                 // 注册动画完成后的回调
@@ -71,10 +90,17 @@
             {
                 end();
             }
+            if (Option.credit_completed)
+            {
+                if(e.Key == Key.Escape)
+                {
+                    end();
+                }
+            }
         }
 
 
-        private void Page_MouseDown(object sender, MouseButtonEventArgs e)                             //点击屏幕任意区域进入游戏
+        private void Page_MouseDown(object sender, MouseButtonEventArgs e) 
         {
             if (credit_end)
             {
@@ -84,6 +110,7 @@
 
         private void end()
         {
+            Option.credit_completed = true;                                     //标记为已经看过致谢
             Option.save_choose = 0;                                                //重置存档选择
             Page_frame.Navigate(new Start());                   //如果滚动结束了，点击鼠标进入Start页面
         }

@@ -8,6 +8,16 @@ namespace 烟尘记
     /// </summary>
     public partial class MainWindow : Window
     {
+
+
+        private double left = 400;
+        private double top = 300;
+        private double width = 800;
+        private double height = 450;
+
+
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -52,15 +62,54 @@ namespace 烟尘记
         {
             if (e.Key == Key.F12)                                                                    //按F12键进入或退出全屏
             {
-                if(this.WindowStyle == WindowStyle.SingleBorderWindow)
+                if (this.WindowStyle == WindowStyle.SingleBorderWindow)
                 {
-                    Data.Main_window.WindowState = WindowState.Maximized;
-                    Data.Main_window.WindowStyle = WindowStyle.None;
-                }
-                else if(this.WindowStyle == WindowStyle.None)
-                {
+
+                    // 恢复窗口尺寸为正常
                     Data.Main_window.WindowState = WindowState.Normal;
+
+                    //记录窗口位置
+                    left = this.Left;
+                    top = this.Top;
+                    width = this.Width;
+                    height = this.Height;
+
+
+                    //确保窗口置顶
+                    this.Topmost = true;
+
+                    // 设置标题栏隐藏
+                    this.WindowStyle = WindowStyle.None;
+
+                    // 设置窗口尺寸为全屏(包含任务栏)
+                    this.WindowState = WindowState.Maximized;
+
+                    // 禁用调整窗口大小
+                    this.ResizeMode = ResizeMode.NoResize;
+
+                }
+                else if (this.WindowStyle == WindowStyle.None)
+                {
+
+                    // 设置标题栏显示
                     Data.Main_window.WindowStyle = WindowStyle.SingleBorderWindow;
+
+                    // 恢复窗口尺寸为正常
+                    Data.Main_window.WindowState = WindowState.Normal;
+
+                    // 恢复调整模式
+                    this.ResizeMode = ResizeMode.CanResize;
+
+                    //取消强制置顶
+                    this.Topmost = false;
+
+
+                    // 恢复窗口位置和大小
+                    this.Left = left;
+                    this.Top = top;
+                    this.Width = width;
+                    this.Height = height;
+
                 }
             }
         }

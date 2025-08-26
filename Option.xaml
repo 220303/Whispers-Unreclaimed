@@ -180,7 +180,7 @@
             <Setter Property="TextElement.Foreground" Value="{StaticResource TextBrush}" />
         </Style>
 
-        <!--滑块数值显示转换器-->
+        <!--  滑块数值显示转换器  -->
         <local:F0FontSizeToStringConverter x:Key="F0FontSizeToStringConverter" />
         <local:F2FontSizeToStringConverter x:Key="F2FontSizeToStringConverter" />
         <local:Music_FontSizeToStringConverter x:Key="Music_FontSizeToStringConverter" />
@@ -238,7 +238,10 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Stretch="Uniform">
-                    <Label Content="{Binding ElementName=Plot_font_size_Slider, Path=Value, Converter={StaticResource F2FontSizeToStringConverter}}" Foreground="White" />
+                    <Label
+                        Content="{Binding ElementName=Plot_font_size_Slider, Path=Value, Converter={StaticResource F2FontSizeToStringConverter}}"
+                        FontFamily="/Filesystem/Resource/Font/再接再厉.ttf#ChisugaShotai"
+                        Foreground="White" />
                 </Viewbox>
 
                 <Slider
@@ -254,7 +257,10 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Stretch="Uniform">
-                    <Label Content="{Binding ElementName=Plot_print_speed_Slider, Path=Value,Converter={StaticResource F0FontSizeToStringConverter} }" Foreground="White" />
+                    <Label
+                        Content="{Binding ElementName=Plot_print_speed_Slider, Path=Value, Converter={StaticResource F0FontSizeToStringConverter}}"
+                        FontFamily="/Filesystem/Resource/Font/再接再厉.ttf#ChisugaShotai"
+                        Foreground="White" />
                 </Viewbox>
 
                 <Slider
@@ -263,15 +269,18 @@
                     Grid.Column="3"
                     VerticalAlignment="Center"
                     Maximum="1"
-                    Minimum="0" 
-                    TickFrequency="0.01"/>
+                    Minimum="0"
+                    TickFrequency="0.01" />
                 <Viewbox
                     Grid.Row="5"
                     Grid.Column="4"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Stretch="Uniform">
-                    <Label Content="{Binding ElementName=Music_volume_Slider, Path=Value, Converter={StaticResource Music_FontSizeToStringConverter}}" Foreground="White" />
+                    <Label
+                        Content="{Binding ElementName=Music_volume_Slider, Path=Value, Converter={StaticResource Music_FontSizeToStringConverter}}"
+                        FontFamily="/Filesystem/Resource/Font/再接再厉.ttf#ChisugaShotai"
+                        Foreground="White" />
                 </Viewbox>
 
 
@@ -287,6 +296,7 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Content="字体大小"
+                        FontFamily="/Filesystem/Resource/Font/再接再厉.ttf#ChisugaShotai"
                         Foreground="White" />
                 </Viewbox>
                 <Viewbox
@@ -299,6 +309,7 @@
                         Grid.Row="3"
                         Grid.Column="1"
                         Content="文字输出速度"
+                        FontFamily="/Filesystem/Resource/Font/再接再厉.ttf#ChisugaShotai"
                         Foreground="White" />
                 </Viewbox>
                 <Viewbox
@@ -311,6 +322,7 @@
                         Grid.Row="5"
                         Grid.Column="1"
                         Content="音乐声音"
+                        FontFamily="/Filesystem/Resource/Font/再接再厉.ttf#ChisugaShotai"
                         Foreground="White" />
                 </Viewbox>
 

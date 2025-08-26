@@ -14,6 +14,7 @@
     MouseDown="Page_MouseDown"
     Tag="program"
     mc:Ignorable="d">
+    
     <Grid>
 
         <!--  背景图片层  -->
@@ -21,7 +22,7 @@
             <Image
                 x:Name="Image1"
                 RenderOptions.BitmapScalingMode="HighQuality"
-                Source="./Filesystem/Resource/Start/Start1.png">
+                Source="./Filesystem/Resource/Start/Start.png">
                 <Image.RenderTransform>
                     <TranslateTransform x:Name="transform1" />
                 </Image.RenderTransform>
@@ -38,7 +39,7 @@
             <Image
                 x:Name="Image2"
                 RenderOptions.BitmapScalingMode="HighQuality"
-                Source="./Filesystem/Resource/Start/Start1.png">
+                Source="./Filesystem/Resource/Start/Start.png">
                 <Image.RenderTransform>
                     <TranslateTransform x:Name="transform2" />
                 </Image.RenderTransform>
@@ -53,6 +54,11 @@
                 </Image.Effect>
             </Image>
         </Canvas>
+
+        <Image
+            x:Name="Logo"
+            RenderOptions.BitmapScalingMode="HighQuality"
+            Source="./Filesystem/Resource/Start/Logo.png"/>
 
     </Grid>
 </Page>

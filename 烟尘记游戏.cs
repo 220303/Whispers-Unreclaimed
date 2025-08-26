@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using static 烟尘记.烟尘记游戏;
-
-namespace 烟尘记
+﻿namespace 烟尘记
 {
     public class 烟尘记游戏
     {
@@ -16,9 +13,11 @@ namespace 烟尘记
         public int Jump;                                                                   //jump值，剧情跳转索引
         public List<string> Record;                                                        //record数组，储存加载的那个存档的游玩记录（剧情-选项 剧情-选项 剧情-选项 剧情-选项......)
 
+
+
         public Text_style default_text_style = new Text_style
         {
-            FontFamily = new FontFamily("Microsoft YaHei"),
+            FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Filesystem/Resource/Font/#求福楷体"),
             FontSize = Option.plot_font_size,
             Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)),
             Bold = false,
@@ -173,6 +172,7 @@ namespace 烟尘记
                     else
                     //如果有自定义风格，则把plot_all_text_array[j]按空格分割并按规则解析为Style('~'代表不采用或默认,'#'代表采用)
                     {
+
                         string[] style_array = plot_all_text_array[j].Split(' ');
                         new_style = new Text_style
                         {

@@ -1,9 +1,15 @@
-制作组成员
+》= 制作组成员 =《
+
 220303（盖力维）	Rebillion（李任）
 
 程序编写：220303
 UI及美工：220303
- 剧情创作：Rebillion
- 音乐搜集：Rebillion
 测试发行：220303
 后期维护：220303
+ 剧情创作：Rebillion
+ 音乐制作：Rebillion
+Logo设计：Rebillion
+
+发行网站：https://github.com/220303/Whispers-Unreclaimed
+当前版本：0.1.0.0
+发行日期：2025 年 8 月 26 日

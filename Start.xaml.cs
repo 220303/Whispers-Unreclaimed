@@ -44,6 +44,7 @@
                 float t = (float)(DateTime.Now - startTime).TotalSeconds;
                 RippleEffect_1.Time = t;
                 RippleEffect_2.Time = t;
+
             };
             rippleTimer.Start();
 

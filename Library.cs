@@ -393,6 +393,96 @@
 
 
 
+    public class ParticleCanvas : Canvas
+    {
+        private class Particle
+        {
+            public Point Position;
+            public Vector Direction;
+            public double Opacity;
+            public double Size;
+            public double Life;
+            public double Age;
+            public Color ColorStart;
+            public Color ColorEnd;
+        }
+
+        private readonly List<Particle> particles = new();
+        private readonly Random rand = new();
+        private bool animating = false;
+        private double durationSeconds = 1.5;
+
+        // 新增参数 maxDistance, durationSeconds
+        public void StartParticles(int count, Color colorStart, Color colorEnd, Rect buttonRect, double maxDistance, double duration)
+        {
+            particles.Clear();
+            durationSeconds = duration;
+            for (int i = 0; i < count; i++)
+            {
+                var start = GetRandomPointOnBorder(buttonRect, rand);
+                var angle = rand.NextDouble() * Math.PI * 2;
+                var distance = rand.NextDouble() * maxDistance * 0.5 + maxDistance * 0.5;
+                var direction = new Vector(Math.Cos(angle), Math.Sin(angle)) * (distance / durationSeconds * 0.01); //速度，0.03，越大越快
+
+                particles.Add(new Particle
+                {
+                    Position = start,
+                    Direction = direction,
+                    Opacity = 0.7,
+                    Size = rand.Next(3, 6),
+                    Life = durationSeconds,
+                    Age = 0,
+                    ColorStart = colorStart,
+                    ColorEnd = colorEnd
+                });
+            }
+            if (!animating)
+            {
+                CompositionTarget.Rendering += OnRendering;
+                animating = true;
+            }
+        }
+
+        private void OnRendering(object sender, EventArgs e)
+        {
+            foreach (var p in particles)
+            {
+                p.Age += 0.02;
+                p.Position += p.Direction;
+                p.Opacity = 0.7 * (1 - p.Age / p.Life);
+            }
+            particles.RemoveAll(p => p.Age >= p.Life);
+            InvalidateVisual();
+            if (particles.Count == 0)
+            {
+                CompositionTarget.Rendering -= OnRendering;
+                animating = false;
+            }
+        }
+
+        protected override void OnRender(DrawingContext dc)
+        {
+            foreach (var p in particles)
+            {
+                var brush = new RadialGradientBrush(p.ColorStart, p.ColorEnd) { Opacity = p.Opacity };
+                dc.DrawEllipse(brush, null, p.Position, p.Size, p.Size);
+            }
+        }
+
+        private Point GetRandomPointOnBorder(Rect rect, Random rand)
+        {
+            int side = rand.Next(0, 4);
+            double x = 0, y = 0;
+            switch (side)
+            {
+                case 0: x = rand.NextDouble() * rect.Width; y = rect.Top; break;
+                case 1: x = rect.Right; y = rand.NextDouble() * rect.Height; break;
+                case 2: x = rand.NextDouble() * rect.Width; y = rect.Bottom; break;
+                case 3: x = rect.Left; y = rand.NextDouble() * rect.Height; break;
+            }
+            return new Point(x, y);
+        }
+    }
     public static class Button_animation
     {
         public struct ParticleColorScheme
@@ -402,152 +492,27 @@
             public Color GlowColor;          // 发光颜色
         }
 
+
+
+
         public static async Task Animation(Button button, ParticleColorScheme colors)
         {
-            //播放并耐心等待按钮的粒子动画完成
-            button_animation(button, colors);
-            await Task.Delay(1300);
-        }
-
-        private static void button_animation(Button button, ParticleColorScheme colors)
-        {
-            var canvas = button.Template.FindName("ParticleCanvas", button) as Canvas;
+            var canvas = button.Template.FindName("ParticleCanvas", button) as ParticleCanvas;
             if (canvas == null) return;
 
-            canvas.Children.Clear();
-
+            // 获取按钮实际区域
             var border = button.Template.FindName("BackgroundBorder", button) as Border;
             if (border == null) return;
-
-            double borderThickness = border.BorderThickness.Left;
             Rect buttonRect = new Rect(0, 0, button.ActualWidth, button.ActualHeight);
 
-            Random rand = new Random();
-            int particleCount = calculate_particle_count(button);
+            int particleCount = (int)((button.ActualWidth + button.ActualHeight) * 1.1); // 数量和按钮大小相关，0.8，越大越大
+            double maxDistance = Math.Max(buttonRect.Width, buttonRect.Height) * 0.2;    // 扩散范围和按钮大小相关，0.5，越大越大
+            double durationSeconds = Math.Max(1.5, maxDistance / 400.0);                 // 动画时长和扩散范围相关，400，越大越慢
 
-            for (int i = 0; i < particleCount; i++)
-            {
-                var particle = new Ellipse
-                {
-                    Width = rand.Next(3, 6),
-                    Height = rand.Next(3, 6),
-                    Fill = new RadialGradientBrush
-                    {
-                        GradientStops =
-                {
-                    new GradientStop(colors.Gradient_start, 0),
-                    new GradientStop(colors.Gradient_end, 1)
-                }
-                    },
-                    Opacity = 0.7
-                };
+            canvas.StartParticles(particleCount, colors.Gradient_start, colors.Gradient_end, buttonRect, maxDistance, durationSeconds);
 
-                particle.Effect = new DropShadowEffect
-                {
-                    Color = colors.GlowColor,
-                    BlurRadius = 5,
-                    ShadowDepth = 0,
-                    Opacity = 0.6
-                };
-
-                Point startPoint = get_random_point_on_border(buttonRect, borderThickness, rand);
-                Canvas.SetLeft(particle, startPoint.X - particle.Width / 2);
-                Canvas.SetTop(particle, startPoint.Y - particle.Height / 2);
-                canvas.Children.Add(particle);
-
-                double durationSeconds = 1.2;
-                var duration = TimeSpan.FromSeconds(durationSeconds);
-
-                Vector direction = (startPoint - new Point(button.ActualWidth / 2, button.ActualHeight / 2));
-                direction.Normalize();
-                double distance = rand.Next(20, 50);
-
-                double targetX = Canvas.GetLeft(particle) + direction.X * distance;
-                double targetY = Canvas.GetTop(particle) + direction.Y * distance;
-
-                var animX = new DoubleAnimation(targetX, duration)
-                {
-                    EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-                };
-
-                var animY = new DoubleAnimation(targetY, duration)
-                {
-                    EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-                };
-
-                var animOpacity = new DoubleAnimationUsingKeyFrames();
-                animOpacity.KeyFrames.Add(new LinearDoubleKeyFrame(0.7, KeyTime.FromTimeSpan(TimeSpan.Zero)));
-                animOpacity.KeyFrames.Add(new LinearDoubleKeyFrame(0.7, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(durationSeconds * 0.6))));
-                animOpacity.KeyFrames.Add(new LinearDoubleKeyFrame(0.0, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(durationSeconds))));
-
-                var animScale = new DoubleAnimation(1, 1.8, duration);
-                particle.RenderTransform = new ScaleTransform();
-                particle.RenderTransformOrigin = new Point(0.5, 0.5);
-
-                particle.BeginAnimation(Canvas.LeftProperty, animX);
-                particle.BeginAnimation(Canvas.TopProperty, animY);
-                particle.BeginAnimation(UIElement.OpacityProperty, animOpacity);
-                particle.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, animScale);
-                particle.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, animScale);
-            }
-        }
-
-        private static Point get_random_point_on_border(Rect rect, double borderThickness, Random rand)
-        //在边框上生成随机点
-        {
-            // 边框区域定义
-            Rect outerRect = rect;
-            Rect innerRect = new Rect(
-                rect.X + borderThickness,
-                rect.Y + borderThickness,
-                rect.Width - 2 * borderThickness,
-                rect.Height - 2 * borderThickness);
-
-            // 随机选择边框的一侧 (0=上, 1=右, 2=下, 3=左)
-            int side = rand.Next(0, 4);
-
-            double x = 0, y = 0;
-
-            switch (side)
-            {
-                case 0: // 上边框
-                    x = rand.NextDouble() * outerRect.Width;
-                    y = outerRect.Top + borderThickness / 2;
-                    break;
-                case 1: // 右边框
-                    x = outerRect.Right - borderThickness / 2;
-                    y = rand.NextDouble() * outerRect.Height;
-                    break;
-                case 2: // 下边框
-                    x = rand.NextDouble() * outerRect.Width;
-                    y = outerRect.Bottom - borderThickness / 2;
-                    break;
-                case 3: // 左边框
-                    x = outerRect.Left + borderThickness / 2;
-                    y = rand.NextDouble() * outerRect.Height;
-                    break;
-            }
-
-            return new Point(x, y);
-        }
-
-        private static int calculate_particle_count(Button button)
-        {
-            // 获取按钮的宽度和高度
-            double width = button.ActualWidth;
-            double height = button.ActualHeight;
-
-            // 计算按钮的周长
-            double perimeter = (width + height) * 2;
-
-            // 定义粒子数量与按钮周长的比例（每x长度单位1个粒子）
-            int baseParticleCount = 4;
-
-            // 根据按钮的面积动态计算粒子数量，比例系数可以根据实际需要调整
-            int particleCount = (int)(perimeter / baseParticleCount);
-
-            // 返回粒子数量，确保最小值为10
-            return Math.Max(particleCount, 10);
+            //耐心等待按钮的粒子动画完成
+            await Task.Delay((int)(durationSeconds * 1000));
         }
 
     }
@@ -870,6 +835,7 @@
 
         public static void Read_in()
         {
+
             string[] save_files = Directory.GetFiles(Saves_directory_path);
             foreach (string file in save_files)
             {
@@ -902,7 +868,7 @@
                 };
 
                 //将数据重新组合成一个字符串，并用换行符分隔每个元素，然后覆写掉存档内原有内容
-                File.WriteAllText(Saves_directory_path + save.Name + ".txt", string.Join('\n', content_array));          
+                File.WriteAllText(Saves_directory_path + save.Name + ".txt", string.Join('\n', content_array));
             }
         }
     }
@@ -920,6 +886,7 @@
         public static double music_volume { get; set; }
         public static int start_picture_speed { get; set; }
         public static int tutorial_completed { get; set; }              //教程是否完成
+        public static bool credit_completed { get; set; }                     //Credit是否可跳过
 
 
         //Option的方法
@@ -935,6 +902,7 @@
             music_volume = ToDouble(content_array[3]);
             start_picture_speed = ToInt16(content_array[4]);
             tutorial_completed = ToInt16(content_array[5]);
+            credit_completed = ToBoolean(ToInt16(content_array[6]));
 
         }
 
@@ -948,6 +916,7 @@
                 Convert.ToString(music_volume),
                 Convert.ToString(start_picture_speed),
                 Convert.ToString(tutorial_completed),
+                Convert.ToString(credit_completed),
             ];
 
             File.WriteAllText(Options_file_path, string.Join('\n', content_array));                            //将数据重新组合成一个字符串，然后覆写掉设置文件内原有内容

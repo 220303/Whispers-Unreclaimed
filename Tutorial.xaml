@@ -9,9 +9,9 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     Background="Black"
-    KeyDown="Page_KeyDown"
-        FocusManager.IsFocusScope="True"
+    FocusManager.IsFocusScope="True"
     Focusable="True"
+    KeyDown="Page_KeyDown"
     PreviewMouseLeftButtonDown="Page_PreviewMouseLeftButtonDown"
     mc:Ignorable="d">
 
@@ -27,15 +27,16 @@
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <ScrollViewer
-                    Name="Tutorial_scrollviewer"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    VerticalScrollBarVisibility="Hidden">
+            Name="Tutorial_scrollviewer"
+            Grid.Row="1"
+            Grid.Column="1"
+            VerticalScrollBarVisibility="Hidden">
             <TextBlock
-            x:Name="Tutorial_text"
-            FontSize="{x:Static local:Option.plot_font_size}"
-            Foreground="White"
-            TextWrapping="Wrap" />
+                x:Name="Tutorial_text"
+                FontFamily="/Filesystem/Resource/Font/再接再厉.ttf#ChisugaShotai"
+                FontSize="{x:Static local:Option.plot_font_size}"
+                Foreground="White"
+                TextWrapping="Wrap" />
         </ScrollViewer>
     </Grid>
 </Page>

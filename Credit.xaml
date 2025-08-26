@@ -29,6 +29,7 @@
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
+        <!--  屏幕上端边框  -->
         <Rectangle
             x:Name="top_mask"
             Grid.Row="0"
@@ -53,6 +54,38 @@
                     <TranslateTransform x:Name="scrolling_translate" />
                 </StackPanel.RenderTransform>
 
+                <!--  多结局提醒  -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="6*" />
+                        <ColumnDefinition Width="23*" />
+                        <ColumnDefinition Width="6*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        x:Name="finish"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        FontFamily="/Filesystem/Resource/Font/剧情.ttf#QFKT"
+                        FontSize="{x:Static local:Option.plot_font_size}"
+                        Foreground="White"
+                        Text="这里是多结局提醒"
+                        TextWrapping="Wrap" />
+                </Grid>
+
+                <!--  占位  -->
+                <TextBlock
+                    x:Name="blank_0"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    FontSize="{x:Static local:Option.plot_font_size}"
+                    Foreground="White"
+                    Text="" />
+
+
                 <!--  下一部剧情预告  -->
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -68,9 +101,10 @@
                         x:Name="plot_trailer"
                         Grid.Row="0"
                         Grid.Column="1"
+                        FontFamily="/Filesystem/Resource/Font/预告.ttf#ShanHaiLiuYingKai 55W"
                         FontSize="{x:Static local:Option.plot_font_size}"
                         Foreground="White"
-                        Text="下一部的预告"
+                        Text="这里是预告"
                         TextWrapping="Wrap" />
                 </Grid>
 
@@ -99,7 +133,7 @@
                     <Image
                         Grid.Row="0"
                         Grid.Column="1"
-                        Source="Filesystem\Credit\合影.png"
+                        Source="/Filesystem/Credit/Picture.png"
                         Visibility="Visible" />
 
                     <TextBlock
@@ -112,6 +146,7 @@
                         x:Name="picture_introduce"
                         Grid.Row="2"
                         Grid.Column="1"
+                        FontFamily="/Filesystem/Resource/Font/AaShiYueHuaChaXingKaiTi-2.ttf#Aa诗月花茶行楷体"
                         FontSize="{x:Static local:Option.plot_font_size}"
                         Foreground="White"
                         Text="图为两位制作者合影，左侧为220303，右侧为Rebillion"
@@ -170,24 +205,30 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
 
                     <!--  我的话  -->
                     <TextBlock
+                        x:Name="me"
                         Grid.Row="0"
                         Grid.Column="0"
                         HorizontalAlignment="Stretch"
                         FontSize="{x:Static local:Option.plot_font_size}"
                         Foreground="White"
-                        Text="220303 &gt;&gt; "
                         TextAlignment="Right" />
-
-                    <TextBlock
-                        x:Name="my_word"
+                    <Border
                         Grid.Row="0"
                         Grid.Column="1"
+                        Margin="20,0"
+                        VerticalAlignment="Center"
+                        BorderBrush="DarkOrange"
+                        BorderThickness="0,0,0,3" />
+                    <TextBlock
+                        x:Name="my_word"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        FontFamily="/Filesystem/Resource/Font/220303.ttf#Aa诗月花茶行楷体"
                         FontSize="{x:Static local:Option.plot_font_size}"
                         Foreground="White"
                         Text=""
@@ -196,25 +237,34 @@
 
                     <!--  占位空行  -->
                     <TextBlock
-                        x:Name="blank"
-                        Grid.Row="2"
+                        x:Name="blank_word"
+                        Grid.Row="3"
                         Grid.Column="1"
                         FontSize="{x:Static local:Option.plot_font_size}"
                         Foreground="White"
                         Text="" />
 
+                    
                     <!--  李任的话  -->
                     <TextBlock
-                        Grid.Row="3"
+                        x:Name="rebillion"
+                        Grid.Row="4"
                         Grid.Column="2"
                         FontSize="{x:Static local:Option.plot_font_size}"
-                        Foreground="White"
-                        Text=" &lt;&lt; Rebillion" />
+                        Foreground="White" />
+                    <Border
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Margin="20,0"
+                        VerticalAlignment="Center"
+                        BorderBrush="ForestGreen"
+                        BorderThickness="0,0,0,3" />
                     <TextBlock
                         x:Name="Rebillion_word"
-                        Grid.Row="3"
+                        Grid.Row="5"
                         Grid.Column="1"
                         HorizontalAlignment="Stretch"
+                        FontFamily="/Filesystem/Resource/Font/Rebillion.ttf#ANZHHRLSXT"
                         FontSize="{x:Static local:Option.plot_font_size}"
                         Foreground="White"
                         Text=""
@@ -223,12 +273,27 @@
 
                 </Grid>
 
+                <!--  占位空行  -->
+                <TextBlock
+                    x:Name="blank_4"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    FontSize="{x:Static local:Option.plot_font_size}"
+                    Foreground="White"
+                    Text="" />
+
+                <!--  Logo展示  -->
+                <Image
+                    x:Name="Logo"
+                    RenderOptions.BitmapScalingMode="HighQuality"
+                    Source="./Filesystem/Resource/Start/Logo.png" />
+
             </StackPanel>
 
         </ScrollViewer>
 
 
-
+        <!--  屏幕下端边框  -->
         <Rectangle
             x:Name="bottom_mask"
             Grid.Row="2"

@@ -86,3 +86,25 @@
 
     }
 }
+
+
+/*
+ *        原按钮布局
+ *             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.8*" />
+                <ColumnDefinition Width="0.8*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="0.8*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="1.5*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1.5*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1.5*" />
+                <RowDefinition Height="3*" />
+            </Grid.RowDefinitions>
+*/

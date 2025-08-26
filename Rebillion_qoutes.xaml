@@ -11,16 +11,16 @@
     Tag="game"
     mc:Ignorable="d">
     <Page.Background>
-        <SolidColorBrush Color="Black"/>
+        <SolidColorBrush Color="Black" />
     </Page.Background>
     <Grid>
-        
+
         <!--  自定义控件用于绘制边框  -->
         <local:MagicCornerBorder_Rebillion_qoutes
             x:Name="Border_drawer"
             Background="Transparent"
             IsHitTestVisible="False" />
-        
+
         <Viewbox Stretch="Uniform">
             <Grid Width="1920" Height="1080">
                 <TextBlock
@@ -28,15 +28,16 @@
                     Width="1352"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    FontSize="54"
+                    FontFamily="/Filesystem/Resource/Font/笔记.ttf#YUN FENG JING LONG XING SHU 常规"
+                    FontSize="72"
                     Foreground="White"
                     TextWrapping="Wrap" />
                 <Label
                     x:Name="Quotes_lable"
                     Margin="1274,625,160,393"
-                    Content=" ——《 Rebillion  Quotes 》"
-                    FontSize="35"
-                    FontStyle="Oblique"
+                    Content=" —— 《 Rebillion  Quotes 》"
+                    FontFamily="/Filesystem/Resource/Font/副标题.ttf#MedievalSharp"
+                    FontSize="42"
                     FontWeight="Black"
                     Foreground="White" />
             </Grid>

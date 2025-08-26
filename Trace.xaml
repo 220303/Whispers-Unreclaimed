@@ -220,6 +220,7 @@
                 Background="Transparent"
                 BorderThickness="0"
                 Foreground="{x:Null}"
+                ScrollViewer.VerticalScrollBarVisibility="Disabled"
                 ItemsSource="{x:Static local:Save.saves}"
                 SelectionChanged="Saves_ListBox_SelectionChanged">
 
@@ -304,7 +305,7 @@
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="1"
-                                        FontFamily="MedievalSharp"
+                                        FontFamily="/Filesystem/Resource/Font/剧情.ttf#QFKT"
                                         FontWeight="Bold"
                                         Foreground="White"
                                         Text="{Binding Name}" />

@@ -207,6 +207,10 @@
                 <TextBox
                     Name="New_save_name"
                     Grid.Column="1"
+                    Background="Black"
+                    FontFamily="/Filesystem/Resource/Font/剧情.ttf#QFKT"
+                    FontSize="{x:Static local:Option.plot_font_size}"
+                    Foreground="White"
                     Text=""
                     TextWrapping="Wrap" />
             </Grid>

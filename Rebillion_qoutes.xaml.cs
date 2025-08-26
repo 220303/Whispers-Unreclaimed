@@ -23,7 +23,7 @@ namespace 烟尘记
 
             //随机显示李任语录
             Random rd = new();
-            Rebillion_words_textblock.Text = "       " + Rebillion_qoute.rebillion_qoutes[rd.Next(0,Rebillion_qoute.rebillion_qoutes.Length)];
+            Rebillion_words_textblock.Text = "   " + Rebillion_qoute.rebillion_qoutes[rd.Next(0,Rebillion_qoute.rebillion_qoutes.Length)];
 
             //根据save_choose的值来选择存档(其值代表活动存档的UUID)，然后初始化游戏逻辑对象（利用所选择的存档内容)
             Task Task_load = Task.Run(() => game = new(Save.saves.FirstOrDefault(s => s.UUID == Option.save_choose)));

@@ -11,18 +11,25 @@
 
 
 	<ItemGroup>
-		<!-- 匹配 Filesystem 文件夹下的所有文件（包括子文件夹）, water_ripple.ps 以及.hlsl除外 -->
+		<!-- 匹配 Filesystem 文件夹下的所有文件（包括子文件夹）, water_ripple.ps 以及.hlsl除外 Font文件夹除外-->
 		<Content Include="Filesystem\**\*.*">
 			<!-- 统一属性 -->
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<!-- 指定输出路径（在 net8.0-windows 中的 Filesystem 文件夹内） -->
 			<TargetPath>.\Filesystem\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
 		</Content>
+
+		<!-- 既不作为资源也不作为内容的 water_ripple.hlsl -->
+		<Content Remove="Filesystem\Resource\Start\water_ripple.hlsl" />
+		
 		<!-- 单独作为资源的 water_ripple.ps -->
-		<Resource Include="Filesystem\Resource\Start\water_ripple.ps"/>
+		<Content Remove="Filesystem\Resource\Start\water_ripple.ps" />
+		<Resource Include="Filesystem\Resource\Start\water_ripple.ps" />
 		
 		<!-- 单独作为资源的 Font 下的内容-->
+		<Content Remove="Filesystem\Resource\Font\**\*.*" />
 		<Resource Include="Filesystem\Resource\Font\**\*.*" />
+		
 	</ItemGroup>
 
 

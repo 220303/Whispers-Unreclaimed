@@ -196,7 +196,7 @@
                             PlotText.Inlines.Add(run);
                             Plot_scrollviewer.ScrollToBottom();
                         }
-                    });
+                    }, DispatcherPriority.Background);
 
                     await Task.Delay(Option.plot_print_speed);
                 }
@@ -253,9 +253,10 @@
                             run.TextDecorations.Add(TextDecorations.Strikethrough);
 
                         PlotText.Inlines.Add(run);
+                        TrimPlotTextLines();
                         Plot_scrollviewer.ScrollToBottom();
                     }
-                });
+                }, DispatcherPriority.Background);
 
                 await Task.Delay(Option.plot_print_speed);
             }
@@ -266,7 +267,37 @@
             {
                 PlotText.Inlines.Add(new LineBreak());
                 PlotText.Inlines.Add(new LineBreak());
+                TrimPlotTextLines();
             });
+        }
+
+        private void TrimPlotTextLines()
+        {
+            int maxLines = 100;//设置最大行数限制
+            int lineCount = 0;
+            foreach (var inline in PlotText.Inlines)
+            {
+                if (inline is LineBreak)
+                    lineCount++;
+            }
+
+            while (lineCount > maxLines)
+            {
+                var toRemove = new List<Inline>();
+                foreach (var inline in PlotText.Inlines)
+                {
+                    toRemove.Add(inline);
+                    if (inline is LineBreak)
+                    {
+                        lineCount--;
+                        break;
+                    }
+                }
+                foreach (var inline in toRemove)
+                {
+                    PlotText.Inlines.Remove(inline);
+                }
+            }
         }
 
         private async Task Choice_print()
@@ -383,7 +414,7 @@
             await Button_animation.Animation(choosen_button, Gold_colors); //播放按钮动画
 
             //输出选择的选项的内容
-            await Text_print_verbatim((string)choosen_button.Content);
+            //await Text_print_verbatim((string)choosen_button.Content);
 
             //若用户点击选项按钮所执行的操作：将按钮的name经处理（去掉之前不得不加的choice）后（剩下的就是数字，可以直接传给input）传给input，执行choose函数
             int choose_number = Convert.ToInt16((choosen_button.Name).Substring(6));                   //储存用该按钮名称计算出的选项编号
@@ -425,9 +456,21 @@
 
         private void finish_view()                                                                           //结局时执行的结尾操作
         {
+
             game.Save_game();                                                                                //保存游戏进度
-            game = null;                                                                                     //将game对象放入垃圾处理器，等待.net平台回收
-            Page_frame.Navigate(new Credit());                            //跳转到Credit页面
+
+            if (game.Jump == 44 | game.Jump == 45)
+            //说明是故事结局
+            {
+                game = null;                                                                                     //将game对象放入垃圾处理器，等待.net平台回收
+                Page_frame.Navigate(new Credit());                            //跳转到Credit页面
+            }
+            else
+            //说明是意外死亡
+            {
+                game = null;                                                                                     //将game对象放入垃圾处理器，等待.net平台回收
+                Page_frame.Navigate(new Failure());                            //跳转到Failure页面
+            }
         }
 
         #endregion
@@ -447,6 +490,8 @@
 
         private void OnStarFrameUpdate(object sender, EventArgs e)
         {
+            CleanupInvisibleElements();
+
             if (Star_field.ActualWidth == 0 || Star_field.ActualHeight == 0) return;
 
             var time = ((RenderingEventArgs)e).RenderingTime;
@@ -684,6 +729,19 @@
         {
             if (Star_field.Children.Contains(element))
                 Star_field.Children.Remove(element);
+        }
+
+        private void CleanupInvisibleElements()
+        {
+            // 移除所有不可见的星星和流星
+            for (int i = Star_field.Children.Count - 1; i >= 0; i--)
+            {
+                var element = Star_field.Children[i];
+                if (element is UIElement ui && ui.Opacity <= 0)
+                {
+                    Star_field.Children.RemoveAt(i);
+                }
+            }
         }
 
         #endregion
