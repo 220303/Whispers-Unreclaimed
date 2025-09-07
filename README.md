@@ -6,7 +6,7 @@
 
 ### Mistrail Dustale — Prequel
 
-
+![Picture](./Filesystem/Resource/Start/Logo.png)
 
 -----
 

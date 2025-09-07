@@ -1,4 +1,4 @@
-﻿namespace 烟尘记
+﻿namespace 烟尘记       
 {
     /// <summary>
     /// Game.xaml 的交互逻辑
