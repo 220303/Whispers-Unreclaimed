@@ -90,7 +90,7 @@
                             </Grid>
 
                             <!--  粒子效果层  -->
-                            <Canvas x:Name="ParticleCanvas" IsHitTestVisible="False" />
+                            <local:ParticleCanvas x:Name="ParticleCanvas" IsHitTestVisible="False"/>
 
                         </Grid>
 

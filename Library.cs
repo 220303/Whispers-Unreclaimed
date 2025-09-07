@@ -916,7 +916,7 @@
                 Convert.ToString(music_volume),
                 Convert.ToString(start_picture_speed),
                 Convert.ToString(tutorial_completed),
-                Convert.ToString(credit_completed),
+                Convert.ToString(ToInt16(credit_completed)),
             ];
 
             File.WriteAllText(Options_file_path, string.Join('\n', content_array));                            //将数据重新组合成一个字符串，然后覆写掉设置文件内原有内容

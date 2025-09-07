@@ -14,7 +14,7 @@
     MouseDown="Page_MouseDown"
     Tag="program"
     mc:Ignorable="d">
-    
+
     <Grid>
 
         <!--  背景图片层  -->
@@ -58,7 +58,7 @@
         <Image
             x:Name="Logo"
             RenderOptions.BitmapScalingMode="HighQuality"
-            Source="./Filesystem/Resource/Start/Logo.png"/>
+            Source="./Filesystem/Resource/Start/Logo.png" />
 
     </Grid>
 </Page>
