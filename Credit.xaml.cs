@@ -31,6 +31,11 @@
             Rebillion_word.Text = File.ReadAllText(Rebillion_word_path);
             credit_text.Text = File.ReadAllText(credit_text_path);
 
+            if (Option.credit_completed)
+            {
+                finish.Text = "看起来...故事似乎又一次走到了尽头......\n\n梦境还会再有吗？\n\n这似乎是一个值得探寻的问题......\n\n......\n\n\n您可以按下Esc回到开始页面......\n";
+            }
+
             //设置占位文本框的内容
             blank_0.Text = "\n\n\n\n\n\n\n\n\n"; 
             blank_1.Text = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";

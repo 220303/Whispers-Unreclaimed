@@ -6,7 +6,7 @@
 
 ### Mistrail Dustale — Prequel
 
-![Picture](./Filesystem/Resource/Start/Logo.png)
+<img src="./Filesystem/Resource/Start/Logo.png"/>
 
 -----
 
@@ -151,9 +151,10 @@ This license requires that reusers give credit to the creator. It allows reusers
 在 "游戏页面" 中，您可以通过按下其他任意键或鼠标点击来获取新的剧情或选项。
 在 "游戏页面" 中，您可以鼠标点击选项按钮或键盘按下对应数字键 (从1记起) 来做出选择。
 在 "游戏页面" 中，您可以用鼠标滚轮浏览曾经的剧情。
-注意：记忆是会消失的，您只能回溯本次游玩的剧情。
+注意：记忆是会消失的，您只能回溯有限的剧情。
+注意：本游戏不支持回档，请慎重对待每一个选择...
 
-现在，请按下任意键或点击鼠标，您即将进入 "新建存档页面"
+现在，请按下任意键或点击鼠标，您即将进入 "新建存档页面"	......
 
 ```
 
@@ -174,7 +175,7 @@ This license requires that reusers give credit to the creator. It allows reusers
   * [x] `程序背景音` 和 `游戏背景音` 制作
   * [x] Logo制作
 
-* #### 未来发展
+* #### 未来发展  *`可能不会完成了`*
 
   - [ ] 分离游戏引擎，作为单独的项目，本项目只作为 `《未追回的呓语》` 游戏本身。
   - [ ] 游戏引擎跨平台移植：采用基于.NET 的跨平台框架，有可能是 `WPF` 的上游 `Avalonia` 框架
@@ -197,6 +198,8 @@ This license requires that reusers give credit to the creator. It allows reusers
 
     > Start
     >
+    > Tutorial
+    >
     > Rebillion qoutes
     >
     > New start
@@ -208,6 +211,10 @@ This license requires that reusers give credit to the creator. It allows reusers
     > Trace
     >
     > Option
+    >
+    > Failure
+    >
+    > Credit
 
 * #### 后台类库
 
@@ -217,14 +224,18 @@ This license requires that reusers give credit to the creator. It allows reusers
 
   + 交互效果及控件类
 
+    > MagicCornerBorder_Rebillion_qoutes/Trace/Option/Pause
+    >
+    > ParticleCanvas
+    >
     > Button_animation
     >
     > Page_frame
     >
     > Music_player
-
+  
   + 全局数据类
-
+  
     > Data
     >
     > Rebillion_qoute
@@ -232,6 +243,10 @@ This license requires that reusers give credit to the creator. It allows reusers
     > Save
     >
     > Option
+  
+* #### 打包发布脚本
+
+  > Build-Whispers-Unreclaimed.ps1
 
 
 
@@ -380,6 +395,30 @@ This license requires that reusers give credit to the creator. It allows reusers
 
 注意：不合法的`Options`更改在保存时不会写入`Options`文件，若此时离开`Option`页面，原数据不会丢失。
 
+#### `Failure`页面：
+
+玩家死亡后的页面。
+
+提示玩家重新开始。
+
+点击屏幕任意区域或按键盘任意键返回`Start`页面。
+
+#### `Credit`页面：
+
+当游戏走到结局之后，显示的致谢页面。
+
+包括下部预告，制作人员介绍、合影、发言等内容。
+
+由于游戏有多结局，第二次及以后进入此页面后提示语会发生变化，可以按`Esc`跳过此页面回到`Start`页面。
+
+用`Rectangle`作为上下边框，用`StackPanel`作为容器，将内容依次排开，用Textblock打空格占位 (有点敷衍但好用)。
+
+在后台代码中设置动画，用滚动时间控制速度。
+
+页面内容播放完毕后，点击屏幕任意区域或按键盘任意键返回`Start`页面。
+
+
+
 #### `烟尘记游戏`类：
 
 名字是历史遗留原因，具有纪念性意义。
@@ -410,11 +449,33 @@ This license requires that reusers give credit to the creator. It allows reusers
 
 `烟尘记游戏(Data.Save save)`构造函数：给定一个存档`Save`，可以构造一个`烟尘记游戏`的实例。
 
-#### Library.cs 类库：
+#### `Library.cs` 类库：
 
 准确的来说`Library.cs`只是个普通`C#`代码文件，因为我尝试过使用分离项目的类库，若类库引用主程序会造成循环依赖，但其中的`Data`类里面的`Main_window`需要引用主程序中的`MainWindow`来将其全局化，所以不能这样构建项目。
 
 包含所有全局类，包括：`Button_animation`，`Music_player`，`Page_frame` 这几个UI效果与交互类；`Data`，`Rebillion Qoute`，`Save`，`Option` 这几个全局数据类。
+
+##### `MagicCornerBorder_Rebillion_qoutes/Trace/Option/Pause`类：
+
+绘制页面边框。
+
+以`MagicCornerBorder_Rebillion_qoutes`类为例说明，它包含边框渐隐线和角落花纹，坦诚地说角落花纹画的效果非常差。
+
+`MarginFromEdge`：控件边缘到装饰线的外边距。
+
+`OffsetFromCorner`：角落花纹向内的偏移量。
+
+`StrokeBrush` / `StrokeThickness`：画笔颜色、粗细。
+
+`CornerGeometry()`：预生成的角落几何图案，实在是画的不好，我将来会改进的。
+
+`OnRender()`：绘制角落花纹和四条渐变边线。
+
+`DrawFadingLine()`：工具函数，画一条线段，颜色从 `StrokeBrush` 渐变到透明，线条端点圆润。用于画渐变边线。
+
+`OnRenderSizeChanged()`：尺寸改变时重绘。
+
+`MagicCornerBorder_Trace/Option/Pause`类只有边框渐隐线，没有角落花纹，边框渐隐线代码同上。
 
 ##### `Button_animation`类
 
@@ -422,11 +483,27 @@ This license requires that reusers give credit to the creator. It allows reusers
 
 `Animation(Button button, ParticleColorScheme colors)`：播放并耐心等待按钮的粒子动画完成。
 
-`button_animation(Button button, ParticleColorScheme colors)`：粒子扩散动画。
+##### `ParticleCanvas`类
 
-`get_random_point_on_border(Rect rect, double borderThickness, Random rand)`：在按钮边框上生成随机点。
+使用 `RadialGradientBrush` 绘制带渐变的小圆点，营造粒子散射的效果。
 
-`calculate_particle_count(Button button)`：根据按钮周长计算需要的粒子数量。
+`Particle`：单个粒子的属性模板。
+
+`particles`：当前所有活动的粒子集合。
+
+`rand`：随机数生成器。
+
+`animating`：是否正在执行动画。
+
+`durationSeconds`：粒子生命周期默认长度。
+
+`StartParticles(int count, Color colorStart, Color colorEnd, Rect buttonRect, double maxDistance, double duration)` ：初始化并启动一批粒子。
+
+`OnRendering(object sender, EventArgs e)`：每一帧更新粒子状态。
+
+`OnRender(DrawingContext dc)`：绘制当前所有粒子。
+
+`GetRandomPointOnBorder(Rect rect, Random rand)`：随机返回按钮边框上的一个点（上/右/下/左四条边中随机一条）。
 
 ##### `Music_player`类
 
@@ -512,9 +589,29 @@ This license requires that reusers give credit to the creator. It allows reusers
 
 `tutorial_completed`：教程完成标志位。
 
+`credit_completed`：结局完成标志位，用于在用户第二次及以后进入`Credit`页面后改变提示语，同时提供`Esc`跳过。
+
 `Read_in()`静态函数：用来读取置文件，在游戏启动时使用。
 
 `Wrtie_out()`全局静态函数：写入设置文件，在保存设置时使用。
+
+
+
+#### `Build-Whispers-Unreclaimed.ps1`打包发布脚本：
+
+`Powershell` 打包发布脚本。
+
+##### 注意：该脚本中应用了我电脑上的绝对文件地址，迁移时需注意替换！
+
+利用 `.NET CLI` 发布三个版本：
+
+- `Dependent-win`：仅游戏，需要玩家的电脑上有 `.NET8.0` 或更高版本的 `.NET Runtime` 方可运行。
+- `Independent-win-x86-32`：自包含版本，无需任何 `.NET Runtime` 也可独立运行，适用于 `x86` 架构 `32` 位 `Windows` 操作系统。
+- `Independent-win-x86-64`：自包含版本，无需任何 `.NET Runtime` 也可独立运行，适用于 `x86` 架构 `64` 位 `Windows` 操作系统。
+
+将程序的 `Filesystem` 替换为发布版本 (发布时会自动使用代码目录的 `Filesystem`，该版本被我用做实验)。
+
+利用 `7zip` 压缩程序文件夹。
 
 
 

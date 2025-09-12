@@ -28,7 +28,7 @@ Write-Host "——————————————————————�
 Write-Host ""
 
 Write-Host "开始清理旧版本文件..." -ForegroundColor Blue
-
+Write-Host "......" -ForegroundColor Blue
 Remove-Item -LiteralPath $de7z   -Force 
 Remove-Item -LiteralPath $in327z -Force 
 Remove-Item -LiteralPath $in647z -Force 

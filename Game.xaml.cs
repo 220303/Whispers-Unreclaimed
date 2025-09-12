@@ -469,7 +469,7 @@
             //说明是意外死亡
             {
                 game = null;                                                                                     //将game对象放入垃圾处理器，等待.net平台回收
-                Page_frame.Navigate(new Credit());                            //跳转到Failure页面
+                Page_frame.Navigate(new Failure());                            //跳转到Failure页面
             }
         }
 
