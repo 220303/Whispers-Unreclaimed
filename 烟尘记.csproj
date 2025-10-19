@@ -35,6 +35,7 @@
 
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-	  <Exec Command="fxc /T ps_2_0 /E main /Fo &quot;$(ProjectDir)Filesystem\Resource\Start\water_ripple.ps&quot; &quot;$(ProjectDir)Filesystem\Resource\Start\water_ripple.hlsl&quot;" />
+	  <Exec Command="dxc /T ps_6_0 /E main /Fo &quot;$(ProjectDir)Filesystem\Resource\Start\water_ripple.ps&quot; &quot;$(ProjectDir)Filesystem\Resource\Start\water_ripple.hlsl&quot;" />
 	</Target>
+
 </Project>
