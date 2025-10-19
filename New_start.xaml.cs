@@ -84,7 +84,8 @@ namespace 烟尘记
                     }
                 );
                 Option.save_choose = (New_save_UUID);
-                Option.Wrtie_out();
+                //这里千万不能写入文件！因为如果玩家在游戏过程中强行退出，那么option里面的save_choose就会指向一个不存在的存档UUID，从而无法进入游戏。一定要和存档文件一起写入！
+                //Option.Wrtie_out();
                 Page_frame.Navigate(new Rebillion_qoutes());           //跳转到Rebillion界面
             }
 

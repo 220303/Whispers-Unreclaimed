@@ -40,6 +40,9 @@
 
         public void Save_game()                                                             //保存游戏进度
         {
+            //如果是新建的存档，此时会真正写入save_choose，可以在New_start_xaml.cs的第87行找到为什么要在此时(也就是和存档文件一起)写入。
+            Option.Wrtie_out();
+
             //保存游戏进度到存档列表的对应值
             Save.save new_save = Save.saves[Option.save_choose - 1];                 //除record和jump外，其余值不变
             new_save.Jump = Jump;
