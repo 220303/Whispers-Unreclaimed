@@ -97,15 +97,19 @@
 
 #### 项目开源协议：
 
-#### CC BY-NC 4.0
+#### 代码：Mulan PSL v2
+
+##### Canonical URL：[木兰宽松许可证, 第2版](https://license.coscl.org.cn/MulanPSL2)
+
+详见 `LICENSE` 页面。
+
+#### 文档：CC BY-NC 4.0
 
 ##### Canonical URL：https://creativecommons.org/licenses/by-nc/4.0/
 
 ##### Creative Commons Attribution-NonCommercial 4.0 International
 
 This license requires that reusers give credit to the creator. It allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, for noncommercial purposes only.
-
-详见 `LICENSE` 页面。
 
 
 
